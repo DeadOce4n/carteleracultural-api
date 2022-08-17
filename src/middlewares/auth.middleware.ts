@@ -1,18 +1,21 @@
 import { Request, Response, NextFunction } from 'express'
 import passport from 'passport'
 import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from 'passport-jwt'
+import jwt from 'jsonwebtoken'
 import { User, Role } from '../models/user.model'
 import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
 
 const options: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET_KEY || 'sacarrácatelas',
+  secretOrKey: process.env.SECRET_KEY ?? 'sacarrácatelas',
   issuer: 'api.carteleraculturalens.com',
-  audience: 'carteleraculturalens.com'
+  audience: 'carteleraculturalens.com',
+  ignoreExpiration: true,
+  passReqToCallback: true
 }
 
-passport.use(new JwtStrategy(options, async (jwtPayload, done) => {
+passport.use(new JwtStrategy(options, async (req: any, jwtPayload: any, done: any) => {
   const user = await User.findById(jwtPayload._id)
   if (!user) {
     return done(new APIError(
@@ -28,6 +31,18 @@ passport.use(new JwtStrategy(options, async (jwtPayload, done) => {
       HttpStatusCode.UNAUTHORIZED,
       true,
       'User not verified'
+    ), false)
+  }
+  try {
+    const token = req.headers.authorization?.split(' ')[1] as string
+    const { issuer, audience } = options
+    jwt.verify(token, options.secretOrKey as string, { issuer, audience })
+  } catch (e) {
+    return done(new APIError(
+      'UNAUTHORIZED',
+      HttpStatusCode.UNAUTHORIZED,
+      true,
+      'Token has expired!'
     ), false)
   }
   return done(null, user)
