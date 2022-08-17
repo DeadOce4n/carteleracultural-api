@@ -12,7 +12,7 @@ export const getUsers = async (_: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { _id } = req.params
-    const user = await User.findById(_id)
+    const user = await User.findById(_id).lean()
     if (!user) {
       throw new APIError(
         'NOT FOUND',

@@ -15,7 +15,8 @@ dotenv.config()
 declare global {
   namespace Express {
     interface User {
-      _id: string
+      _id: string,
+      role: string
     }
   }
 }

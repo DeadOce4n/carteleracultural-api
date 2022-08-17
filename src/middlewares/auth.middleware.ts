@@ -1,6 +1,7 @@
+import { Request, Response, NextFunction } from 'express'
 import passport from 'passport'
 import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from 'passport-jwt'
-import { User } from '../models/user.model'
+import { User, Role } from '../models/user.model'
 import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
 
@@ -36,3 +37,19 @@ export const authMiddleware = passport.authenticate('jwt', {
   session: false,
   failWithError: true
 })
+
+export const roleCheckMiddleware = (roles: Role[]) => {
+  const roleCheck = (req: Request, res: Response, next: NextFunction) => {
+    const userRole: Role = req.user?.role as Role || 'normal'
+    if (!roles.includes(userRole)) {
+      throw new APIError(
+        'UNAUTHORIZED',
+        HttpStatusCode.UNAUTHORIZED,
+        true,
+        'User has insufficient permissions'
+      )
+    }
+    next()
+  }
+  return roleCheck
+}

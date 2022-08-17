@@ -1,9 +1,8 @@
 import { Model, Schema, model } from 'mongoose'
 import { generatePasswordHash, checkPasswordHash } from '../utils/passwd'
 
-export const roles = ['normal', 'admin', 'super']
-
-type Roles = typeof roles[number]
+export const roles = ['normal', 'admin', 'super'] as const
+export type Role = typeof roles[number]
 
 interface IUser {
   name: string,
@@ -11,7 +10,7 @@ interface IUser {
   username: string,
   email: string,
   password: string,
-  role: Roles,
+  role: Role,
   active: boolean,
   verified: boolean,
   registeredAt: Date,
