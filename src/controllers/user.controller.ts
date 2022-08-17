@@ -3,7 +3,6 @@ import { User } from '../models/user.model'
 import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
 import { omit } from 'lodash'
-import { logger } from '../utils/logger'
 
 export const getUsers = async (_: Request, res: Response) => {
   const users = await User.find()
