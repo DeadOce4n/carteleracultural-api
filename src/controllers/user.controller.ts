@@ -55,11 +55,11 @@ export const addUser = async (req: Request, res: Response, next: NextFunction) =
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params
-  const userId = req.user?._id as string
+  const userId = req.user?._id
   const userRole = req.user?.role as string
 
   try {
-    if (userRole !== 'super' && _id !== userId) {
+    if (userRole !== 'super' && _id !== String(userId)) {
       throw new APIError(
         'UNAUTHORIZED',
         HttpStatusCode.UNAUTHORIZED,

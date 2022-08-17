@@ -22,7 +22,7 @@ eventRouter.post(
 eventRouter.put(
   '/:_id',
   authMiddleware,
-  roleCheckMiddleware(['admin', 'super']),
+  roleCheckMiddleware(['normal', 'admin', 'super']),
   updateEventValidator,
   updateEvent
 )

@@ -1,5 +1,5 @@
 import express, { Express } from 'express'
-import mongoose from 'mongoose'
+import mongoose, { ObjectId } from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import { loggerMiddleware } from './middlewares/logger.middleware'
@@ -15,7 +15,7 @@ dotenv.config()
 declare global {
   namespace Express {
     interface User {
-      _id: string,
+      _id: ObjectId,
       role: string
     }
   }

@@ -38,12 +38,12 @@ export const addEvent = async (req: Request, res: Response, next: NextFunction) 
 
 export const updateEvent = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params
+  const userId = req.user?._id
+  const userRole = req.user?.role as string
+
   try {
-    const event = await Event.findOneAndUpdate(
-      { _id },
-      { $set: { ...req.body } },
-      { new: true }
-    )
+    const event = await Event.findById(_id)
+
     if (!event) {
       throw new APIError(
         'NOT FOUND',
@@ -52,7 +52,23 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
         'Event not found'
       )
     }
-    return res.status(200).send(event)
+
+    if (!['admin', 'super'].includes(userRole) && String(event.createdBy) !== String(userId)) {
+      throw new APIError(
+        'UNAUTHORIZED',
+        HttpStatusCode.UNAUTHORIZED,
+        true,
+        `User with "${userRole}" role can only update its own events`
+      )
+    }
+
+    const updatedEvent = await Event.findOneAndUpdate(
+      { _id },
+      { $set: { ...req.body } },
+      { new: true }
+    )
+
+    return res.status(200).send(updatedEvent)
   } catch (e) {
     next(e)
   }
