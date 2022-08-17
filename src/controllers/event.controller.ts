@@ -1,16 +1,29 @@
 import { Request, Response, NextFunction } from 'express'
 import { Event } from '../models/event.model'
+import { APIError } from '../utils/baseError'
+import { HttpStatusCode } from '../utils/enums'
 
 export const getEvents = async (req: Request, res: Response) => {
   const events = await Event.find().populate('categories')
   return res.status(200).send(events)
 }
 
-export const getEvent = async (req: Request, res: Response) => {
+export const getEvent = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params
-  const event = await Event.findById(_id).populate('categories')
-  if (!event) return res.status(404).send({ error: 'Event not found.' })
-  return res.status(200).send(event)
+  try {
+    const event = await Event.findById(_id).populate('categories')
+    if (!event) {
+      throw new APIError(
+        'NOT FOUND',
+        HttpStatusCode.NOT_FOUND,
+        true,
+        'Event not found'
+      )
+    }
+    return res.status(200).send(event)
+  } catch (e) {
+    next(e)
+  }
 }
 
 export const addEvent = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,17 +38,21 @@ export const addEvent = async (req: Request, res: Response, next: NextFunction) 
 
 export const updateEvent = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params
-  const event = await Event.findById(_id)
-  if (!event) {
-    return res.status(404).send({
-      error: {
-        type: 'Entity not found',
-        body: 'Event not found.'
-      }
-    })
-  }
   try {
-    await event.updateOne({ _id }, { ...req.body })
+    const event = await Event.findOneAndUpdate(
+      { _id },
+      { $set: { ...req.body } },
+      { new: true }
+    )
+    if (!event) {
+      throw new APIError(
+        'NOT FOUND',
+        HttpStatusCode.NOT_FOUND,
+        true,
+        'Event not found'
+      )
+    }
+    return res.status(200).send(event)
   } catch (e) {
     next(e)
   }

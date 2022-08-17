@@ -45,3 +45,25 @@ export const addCategory = async (req: Request, res: Response, next: NextFunctio
     next(e)
   }
 }
+
+export const updateCategory = async (req: Request, res: Response, next: NextFunction) => {
+  const { _id } = req.params
+  try {
+    const category = await Category.findOneAndUpdate(
+      { _id },
+      { $set: { ...req.body } },
+      { new: true }
+    )
+    if (!category) {
+      throw new APIError(
+        'NOT FOUND',
+        HttpStatusCode.NOT_FOUND,
+        true,
+        'Category not found'
+      )
+    }
+    return res.status(200).send(category)
+  } catch (e) {
+    next(e)
+  }
+}

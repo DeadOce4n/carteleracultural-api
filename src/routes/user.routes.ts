@@ -2,9 +2,10 @@ import { Router } from 'express'
 import {
   getUsers,
   getUser,
-  addUser
+  addUser,
+  updateUser
 } from '../controllers/user.controller'
-import { addUserValidator } from '../validators/user.validator'
+import { addUserValidator, updateUserValidator } from '../validators/user.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
 
 const userRouter = Router()
@@ -17,6 +18,13 @@ userRouter.post(
   roleCheckMiddleware(['admin', 'super']),
   addUserValidator,
   addUser
+)
+userRouter.put(
+  '/:_id',
+  authMiddleware,
+  roleCheckMiddleware(['normal', 'admin', 'super']),
+  updateUserValidator,
+  updateUser
 )
 
 export default userRouter

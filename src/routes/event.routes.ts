@@ -2,9 +2,10 @@ import { Router } from 'express'
 import {
   getEvents,
   getEvent,
-  addEvent
+  addEvent,
+  updateEvent
 } from '../controllers/event.controller'
-import { addEventValidator } from '../validators/event.validator'
+import { addEventValidator, updateEventValidator } from '../validators/event.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
 
 const eventRouter = Router()
@@ -17,6 +18,13 @@ eventRouter.post(
   roleCheckMiddleware(['admin', 'super']),
   addEventValidator,
   addEvent
+)
+eventRouter.put(
+  '/:_id',
+  authMiddleware,
+  roleCheckMiddleware(['admin', 'super']),
+  updateEventValidator,
+  updateEvent
 )
 
 export default eventRouter

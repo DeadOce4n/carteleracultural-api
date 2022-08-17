@@ -2,9 +2,10 @@ import { Router } from 'express'
 import {
   getCategories,
   getCategory,
-  addCategory
+  addCategory,
+  updateCategory
 } from '../controllers/category.controller'
-import { addCategoryValidator } from '../validators/category.validator'
+import { addCategoryValidator, updateCategoryValidator } from '../validators/category.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
 
 const categoryRouter = Router()
@@ -17,6 +18,13 @@ categoryRouter.post(
   roleCheckMiddleware(['admin', 'super']),
   addCategoryValidator,
   addCategory
+)
+categoryRouter.put(
+  '/:_id',
+  authMiddleware,
+  roleCheckMiddleware(['admin', 'super']),
+  updateCategoryValidator,
+  updateCategory
 )
 
 export default categoryRouter

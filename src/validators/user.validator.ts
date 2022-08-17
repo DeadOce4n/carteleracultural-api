@@ -14,7 +14,53 @@ export const addUserValidator = BodyValidator({
   registeredAt: { type: 'date', convert: true, default: new Date() },
   lastLogin: { type: 'date', convert: true, optional: true }
 }, (err, req: Request, res: Response, next: NextFunction) => {
-  console.log('Validation error!')
-  console.log(err)
-  res.status(418).send({ error: { type: 'ValidationError', body: err.body } })
+  next(err)
+})
+
+export const updateUserValidator = BodyValidator({
+  name: {
+    type: 'string',
+    optional: true
+  },
+  lastName: {
+    type: 'string',
+    optional: true
+  },
+  username: {
+    type: 'string',
+    optional: true
+  },
+  email: {
+    type: 'string',
+    optional: true
+  },
+  password: {
+    type: 'string',
+    optional: true
+  },
+  role: {
+    type: 'string',
+    enum: roles,
+    optional: true
+  },
+  active: {
+    type: 'boolean',
+    optional: true
+  },
+  verified: {
+    type: 'boolean',
+    optional: true
+  },
+  registeredAt: {
+    type: 'date',
+    convert: true,
+    optional: true
+  },
+  lastLogin: {
+    type: 'date',
+    convert: true,
+    optional: true
+  }
+}, (err, req: Request, res: Response, next: NextFunction) => {
+  next(err)
 })

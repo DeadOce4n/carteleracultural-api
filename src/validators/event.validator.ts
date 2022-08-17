@@ -47,3 +47,52 @@ export const addEventValidator = BodyValidator({
   res.status(418).send({ error: { type: 'ValidationError', body: err.body } })
 }
 )
+
+export const updateEventValidator = BodyValidator({
+  title: {
+    type: 'string',
+    optional: true
+  },
+  description: {
+    type: 'string',
+    optional: true
+  },
+  flyer: {
+    type: 'string',
+    optional: true
+  },
+  start: {
+    type: 'date',
+    optional: true,
+    convert: true
+  },
+  end: {
+    type: 'date',
+    optional: true,
+    convert: true
+  },
+  ticketLink: {
+    type: 'string',
+    optional: true
+  },
+  locationName: {
+    type: 'string',
+    optional: true
+  },
+  active: {
+    type: 'boolean',
+    optional: true
+  },
+  published: {
+    type: 'boolean',
+    optional: true
+  },
+  categories: {
+    type: 'array',
+    items: 'string',
+    optional: true
+  }
+}, (err, req: Request, res: Response, next: NextFunction) => {
+  next(err)
+}
+)

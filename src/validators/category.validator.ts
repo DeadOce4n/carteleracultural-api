@@ -9,3 +9,16 @@ export const addCategoryValidator = BodyValidator({
   console.log(err)
   res.status(418).send({ error: { type: 'ValidationError', body: err.body } })
 })
+
+export const updateCategoryValidator = BodyValidator({
+  name: {
+    type: 'string',
+    optional: true
+  },
+  active: {
+    type: 'boolean',
+    optional: true
+  }
+}, (err, req: Request, res: Response, next: NextFunction) => {
+  next(err)
+})
