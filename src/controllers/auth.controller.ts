@@ -49,7 +49,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const secretKey = process.env.SECRET_KEY || 'sacarrácatelas'
     const payload = omit(user.toObject(), 'password')
     const token = jwt.sign(payload, secretKey, {
-      expiresIn: 5,
+      expiresIn: '1h',
       audience: 'carteleraculturalens.com',
       issuer: 'api.carteleraculturalens.com'
     })
