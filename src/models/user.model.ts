@@ -29,7 +29,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   username: String,
   email: String,
   password: String,
-  role: { type: String, enum: roles },
+  role: { type: String, enum: roles, default: 'normal' },
   active: { type: Boolean, default: true },
   verified: { type: Boolean, default: false },
   registeredAt: { type: Date, default: Date.now },
