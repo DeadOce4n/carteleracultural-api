@@ -106,14 +106,14 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
 
 export const verify = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { userId, code }: { userId: string, code: string } = req.body
+    const { code, userId } = req.body
     const user = await User.findById(userId)
     if (!user) {
       throw new APIError(
         'NOT FOUND',
         HttpStatusCode.NOT_FOUND,
         true,
-        'User not found.'
+        'User not found'
       )
     }
     const verification = await Verification.findOne({ email: user.email })
@@ -128,6 +128,39 @@ export const verify = async (req: Request, res: Response, next: NextFunction) =>
     user.verified = true
     await user.save()
     return res.status(200).send(omit(user.toObject(), 'password'))
+  } catch (e) {
+    next(e)
+  }
+}
+
+export const resendVerification = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user?._id
+    const user = await User.findById(userId)
+    if (!user) {
+      throw new APIError(
+        'NOT FOUND',
+        HttpStatusCode.NOT_FOUND,
+        true,
+        'User not found'
+      )
+    }
+    const existingVerification = await Verification.findOne({ email: user.email })
+    if (existingVerification) {
+      throw new APIError(
+        'CONFLICT',
+        HttpStatusCode.CONFLICT,
+        true,
+        'Code already sent to email, please try again later'
+      )
+    }
+    const verification = new Verification({
+      email: user.email,
+      code: await generateRandomToken()
+    })
+    await sendMail(user.email, verification.code)
+    await verification.save()
+    return res.status(200)
   } catch (e) {
     next(e)
   }
