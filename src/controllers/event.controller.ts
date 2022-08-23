@@ -5,7 +5,13 @@ import { HttpStatusCode } from '../utils/enums'
 
 export const getEvents = async (req: Request, res: Response) => {
   const events = await Event.find().populate('categories')
-  return res.status(200).send(events)
+  return res.status(200).send({
+    data: events,
+    meta: {
+      success: true,
+      message: 'Fetched events successfully'
+    }
+  })
 }
 
 export const getEvent = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,7 +26,13 @@ export const getEvent = async (req: Request, res: Response, next: NextFunction) 
         'Event not found'
       )
     }
-    return res.status(200).send(event)
+    return res.status(200).send({
+      data: event,
+      meta: {
+        success: true,
+        message: 'Fetched event successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -30,7 +42,13 @@ export const addEvent = async (req: Request, res: Response, next: NextFunction) 
   const newEvent = new Event({ ...req.body, createdBy: req.user?._id })
   try {
     await newEvent.save()
-    return res.status(200).send(newEvent)
+    return res.status(200).send({
+      data: newEvent,
+      meta: {
+        success: true,
+        message: 'Created event successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -68,7 +86,13 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
       { new: true }
     )
 
-    return res.status(200).send(updatedEvent)
+    return res.status(200).send({
+      data: updatedEvent,
+      meta: {
+        success: true,
+        message: 'Updated event successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }

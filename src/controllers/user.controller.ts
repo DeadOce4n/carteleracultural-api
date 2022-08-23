@@ -21,7 +21,13 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
         'User not found.'
       )
     }
-    return res.status(200).send(user)
+    return res.status(200).send({
+      data: user,
+      meta: {
+        success: true,
+        message: 'Fetched user successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -47,7 +53,13 @@ export const addUser = async (req: Request, res: Response, next: NextFunction) =
 
     const newUser = new User({ ...req.body })
     await newUser.save()
-    return res.status(200).send(omit(newUser.toObject(), 'password'))
+    return res.status(200).send({
+      data: omit(newUser.toObject(), 'password'),
+      meta: {
+        success: true,
+        message: 'Created user successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -83,7 +95,13 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
       )
     }
 
-    return res.status(200).send(user)
+    return res.status(200).send({
+      data: user,
+      meta: {
+        success: true,
+        message: 'Updated user successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }

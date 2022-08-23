@@ -5,7 +5,13 @@ import { HttpStatusCode } from '../utils/enums'
 
 export const getCategories = async (_: Request, res: Response) => {
   const categories = await Category.find()
-  return res.status(200).send(categories)
+  return res.status(200).send({
+    data: categories,
+    meta: {
+      success: true,
+      message: 'Fetched categories successfully'
+    }
+  })
 }
 
 export const getCategory = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,7 +26,13 @@ export const getCategory = async (req: Request, res: Response, next: NextFunctio
         'Category not found'
       )
     }
-    return res.status(200).send(category)
+    return res.status(200).send({
+      data: category,
+      meta: {
+        success: true,
+        message: 'Fetched category successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -40,7 +52,13 @@ export const addCategory = async (req: Request, res: Response, next: NextFunctio
     }
     const newCategory = new Category({ ...req.body })
     await newCategory.save()
-    return res.status(200).send(newCategory)
+    return res.status(200).send({
+      data: newCategory,
+      meta: {
+        success: true,
+        message: 'Created category successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -62,7 +80,13 @@ export const updateCategory = async (req: Request, res: Response, next: NextFunc
         'Category not found'
       )
     }
-    return res.status(200).send(category)
+    return res.status(200).send({
+      data: category,
+      meta: {
+        success: true,
+        message: 'Updated category successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
