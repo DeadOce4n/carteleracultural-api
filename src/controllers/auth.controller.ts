@@ -79,7 +79,6 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     }
 
     const newUser = new User({ ...req.body })
-    await newUser.save()
 
     const prevVerification = await Verification.findOne({ email: newUser.email }).lean()
     if (prevVerification) {
@@ -98,7 +97,14 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
 
     await sendMail(newUser.email, verification.code)
     await verification.save()
-    return res.status(200).send(omit(newUser.toObject(), 'password'))
+    await newUser.save()
+    return res.status(200).send({
+      data: omit(newUser.toObject(), 'password'),
+      meta: {
+        success: true,
+        message: 'User registered successfully, verification code sent to email'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -127,7 +133,13 @@ export const verify = async (req: Request, res: Response, next: NextFunction) =>
     }
     user.verified = true
     await user.save()
-    return res.status(200).send(omit(user.toObject(), 'password'))
+    return res.status(200).send({
+      data: omit(user.toObject(), 'password'),
+      meta: {
+        success: true,
+        message: 'Verified account successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -160,7 +172,13 @@ export const resendVerification = async (req: Request, res: Response, next: Next
     })
     await sendMail(user.email, verification.code)
     await verification.save()
-    return res.status(200)
+    return res.status(200).send({
+      data: null,
+      meta: {
+        success: true,
+        message: 'Verification code sent to email'
+      }
+    })
   } catch (e) {
     next(e)
   }
