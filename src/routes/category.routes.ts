@@ -3,7 +3,8 @@ import {
   getCategories,
   getCategory,
   addCategory,
-  updateCategory
+  updateCategory,
+  deleteCategory
 } from '../controllers/category.controller'
 import { addCategoryValidator, updateCategoryValidator } from '../validators/category.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
@@ -25,6 +26,12 @@ categoryRouter.put(
   roleCheckMiddleware(['admin', 'super']),
   updateCategoryValidator,
   updateCategory
+)
+categoryRouter.delete(
+  '/:_id',
+  authMiddleware,
+  roleCheckMiddleware(['admin', 'super']),
+  deleteCategory
 )
 
 export default categoryRouter

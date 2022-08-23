@@ -106,3 +106,30 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
     next(e)
   }
 }
+
+export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+  const { _id } = req.params
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id },
+      { $set: { active: false } }
+    )
+    if (!user) {
+      throw new APIError(
+        'NOT_FOUND',
+        HttpStatusCode.NOT_FOUND,
+        true,
+        'User does not exist'
+      )
+    }
+    return res.status(200).send({
+      data: null,
+      meta: {
+        success: true,
+        message: 'User deleted successfully'
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
+}

@@ -43,12 +43,24 @@ export const addCategory = async (req: Request, res: Response, next: NextFunctio
   try {
     const category = await Category.findOne({ name })
     if (category) {
-      throw new APIError(
-        'CONFLICT',
-        HttpStatusCode.CONFLICT,
-        true,
-        `Category "${name}" already exists`
-      )
+      if (category.active) {
+        throw new APIError(
+          'CONFLICT',
+          HttpStatusCode.CONFLICT,
+          true,
+          `Category "${name}" already exists`
+        )
+      } else {
+        category.active = true
+        await category.save()
+        return res.status(200).send({
+          data: category,
+          meta: {
+            success: true,
+            message: 'Re-activated category successfully'
+          }
+        })
+      }
     }
     const newCategory = new Category({ ...req.body })
     await newCategory.save()
@@ -85,6 +97,33 @@ export const updateCategory = async (req: Request, res: Response, next: NextFunc
       meta: {
         success: true,
         message: 'Updated category successfully'
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
+}
+
+export const deleteCategory = async (req: Request, res: Response, next: NextFunction) => {
+  const { _id } = req.params
+  try {
+    const category = await Category.findOneAndUpdate(
+      { _id },
+      { $set: { active: false } }
+    )
+    if (!category) {
+      throw new APIError(
+        'NOT_FOUND',
+        HttpStatusCode.NOT_FOUND,
+        true,
+        'Category does not exist'
+      )
+    }
+    return res.status(200).send({
+      data: null,
+      meta: {
+        success: true,
+        message: 'Category deleted successfully'
       }
     })
   } catch (e) {

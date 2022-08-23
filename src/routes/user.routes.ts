@@ -3,7 +3,8 @@ import {
   getUsers,
   getUser,
   addUser,
-  updateUser
+  updateUser,
+  deleteUser
 } from '../controllers/user.controller'
 import { addUserValidator, updateUserValidator } from '../validators/user.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
@@ -25,6 +26,12 @@ userRouter.put(
   roleCheckMiddleware(['normal', 'admin', 'super']),
   updateUserValidator,
   updateUser
+)
+userRouter.delete(
+  '/:_id',
+  authMiddleware,
+  roleCheckMiddleware(['super']),
+  deleteUser
 )
 
 export default userRouter

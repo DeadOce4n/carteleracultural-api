@@ -3,7 +3,8 @@ import {
   getEvents,
   getEvent,
   addEvent,
-  updateEvent
+  updateEvent,
+  deleteEvent
 } from '../controllers/event.controller'
 import { addEventValidator, updateEventValidator } from '../validators/event.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
@@ -25,6 +26,12 @@ eventRouter.put(
   roleCheckMiddleware(['normal', 'admin', 'super']),
   updateEventValidator,
   updateEvent
+)
+eventRouter.delete(
+  '/:_id',
+  authMiddleware,
+  roleCheckMiddleware(['normal', 'admin', 'super']),
+  deleteEvent
 )
 
 export default eventRouter

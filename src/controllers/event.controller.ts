@@ -97,3 +97,30 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
     next(e)
   }
 }
+
+export const deleteEvent = async (req: Request, res: Response, next: NextFunction) => {
+  const { _id } = req.params
+  try {
+    const event = await Event.findOneAndUpdate(
+      { _id },
+      { $set: { active: false } }
+    )
+    if (!event) {
+      throw new APIError(
+        'NOT_FOUND',
+        HttpStatusCode.NOT_FOUND,
+        true,
+        'Event does not exist'
+      )
+    }
+    return res.status(200).send({
+      data: null,
+      meta: {
+        success: true,
+        message: 'Event deleted successfully'
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
+}
