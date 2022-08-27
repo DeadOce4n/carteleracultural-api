@@ -6,12 +6,16 @@ import {
   updateEvent,
   deleteEvent
 } from '../controllers/event.controller'
-import { addEventValidator, updateEventValidator } from '../validators/event.validator'
+import {
+  addEventValidator,
+  updateEventValidator,
+  queryParamsValidator
+} from '../validators/event.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
 
 const eventRouter = Router()
 
-eventRouter.get('/', getEvents)
+eventRouter.get('/', queryParamsValidator, getEvents)
 eventRouter.get('/:_id', getEvent)
 eventRouter.post(
   '/',
