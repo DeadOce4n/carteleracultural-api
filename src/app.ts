@@ -1,5 +1,5 @@
 import express, { Express } from 'express'
-import mongoose, { ObjectId } from 'mongoose'
+import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import { loggerMiddleware } from './middlewares/logger.middleware'
@@ -11,15 +11,6 @@ import userRouter from './routes/user.routes'
 import authRouter from './routes/auth.routes'
 
 dotenv.config()
-
-declare global {
-  namespace Express {
-    interface User {
-      _id: ObjectId,
-      role: string
-    }
-  }
-}
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/ccultural-prod'
 const MONGO_DB = process.env.MONGO_DB || 'cartelera-cultural'
