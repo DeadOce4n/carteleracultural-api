@@ -12,10 +12,11 @@ import {
   queryParamsValidator
 } from '../validators/event.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
+import { filterMiddleware } from '../middlewares/filters.middleware'
 
 const eventRouter = Router()
 
-eventRouter.get('/', queryParamsValidator, getEvents)
+eventRouter.get('/', queryParamsValidator, filterMiddleware, getEvents)
 eventRouter.get('/:_id', getEvent)
 eventRouter.post(
   '/',

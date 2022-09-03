@@ -1,8 +1,8 @@
 import { BodyValidator, QueryValidator } from 'fastest-express-validator'
 import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
-import {APIError} from '../utils/baseError'
-import {HttpStatusCode} from '../utils/enums'
+import { APIError } from '../utils/baseError'
+import { HttpStatusCode } from '../utils/enums'
 
 const { ObjectId: ObjectID } = Types
 
@@ -47,9 +47,13 @@ export const addEventValidator = BodyValidator({
     default: []
   }
 }, (err, req: Request, res: Response, next: NextFunction) => {
-  next(err)
-}
-)
+  next(new APIError(
+    'BAD REQUEST',
+    HttpStatusCode.BAD_REQUEST,
+    true,
+    `ValidationError: ${JSON.stringify(err, null, 4)}`
+  ))
+})
 
 export const updateEventValidator = BodyValidator({
   title: {
@@ -96,37 +100,71 @@ export const updateEventValidator = BodyValidator({
     optional: true
   }
 }, (err, req: Request, res: Response, next: NextFunction) => {
-  next(err)
-}
-)
+  next(new APIError(
+    'BAD REQUEST',
+    HttpStatusCode.BAD_REQUEST,
+    true,
+    `ValidationError: ${JSON.stringify(err, null, 4)}`
+  ))
+})
 
 export const queryParamsValidator = QueryValidator({
   filters: {
     type: 'object',
     props: {
       title: { type: 'string', optional: true },
-      date: {
+      start: {
         type: 'object',
         props: {
-          start: {
+          lower: {
             type: 'date',
-            optional: false,
-            convert: true,
-            empty: true
+            convert: true
           },
-          end: {
+          upper: {
             type: 'date',
-            optional: true,
             convert: true,
-            empty: true
+            optional: true
+          }
+        },
+        optional: true
+      },
+      end: {
+        type: 'object',
+        props: {
+          lower: {
+            type: 'date',
+            convert: true
+          },
+          upper: {
+            type: 'date',
+            convert: true,
+            optional: true
           }
         },
         optional: true
       },
       published: {
+        type: 'enum',
+        values: [true, false, 'all'],
+        optional: true,
+        convert: true
+      },
+      active: {
+        type: 'enum',
+        values: [true, false, 'all'],
+        optional: true,
+        convert: true
+      },
+      ticketLink: {
         type: 'boolean',
         optional: true,
         convert: true
+      },
+      createdBy: {
+        type: 'objectID',
+        ObjectID,
+        convert: true,
+        optional: true
       },
       categories: {
         type: 'array',
@@ -138,6 +176,16 @@ export const queryParamsValidator = QueryValidator({
       }
     },
     optional: true
+  },
+  skip: {
+    type: 'number',
+    convert: true,
+    default: 0
+  },
+  limit: {
+    type: 'number',
+    convert: true,
+    default: 20
   }
 }, (err, req: Request, res: Response, next: NextFunction) => {
   next(new APIError(

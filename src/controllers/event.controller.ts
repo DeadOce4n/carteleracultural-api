@@ -2,23 +2,16 @@ import { Request, Response, NextFunction } from 'express'
 import { Event } from '../models/event.model'
 import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
-import { buildQuery } from '../utils/func'
 
 export const getEvents = async (req: Request, res: Response) => {
-  const { filters } = req.query as any
-  let query: any = {}
-  if (filters) {
-    if (!Object.keys(filters).includes('end')) {
-      filters.end = filters.start
-    }
-    query = buildQuery(filters)
-  }
-  const events = await Event.find(query)
+  const { query: { skip, limit }, filters } = req as any
+  const events = await Event.find(filters, null, { skip, limit })
   return res.status(200).send({
     data: events,
     meta: {
       success: true,
-      message: 'Fetched events successfully'
+      message: 'Fetched events successfully',
+      count: events.length
     }
   })
 }

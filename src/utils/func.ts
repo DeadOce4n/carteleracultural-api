@@ -9,33 +9,45 @@ export const generateRandomToken = async () => {
   return token.toString('hex')
 }
 
-// TODO: Create a middleware that implements this function
-export const buildQuery = (json: any) => {
+export const buildFilters = (json: any) => {
   const query: any = {}
-  Object.entries(json).forEach(([k, v]: [string, any]) => {
-    switch (k) {
-      case 'title':
-        query[k] = { $regex: v, $options: 'i' }
-        break
-      case 'description':
-        query[k] = { $regex: v, $options: 'i' }
-        break
-      case 'createdBy':
-      case 'published':
-        query[k] = v
-        break
-      case 'categories':
-        query[k] = { $all: v }
-        break
-      case 'ticketLink':
-        query[k] = { $exists: v }
-        break
-      case 'start':
-        query[k] = { ...query.start, $gte: dayjs(v).startOf('D').toDate() }
-        break
-      case 'end':
-        query.start = { ...query.start, $lte: dayjs(v).endOf('D').toDate() }
-    }
-  })
+  if (json) {
+    Object.entries(json).forEach(([k, v]: [string, any]) => {
+      switch (k) {
+        case 'title':
+          query[k] = { $regex: v, $options: 'i' }
+          break
+        case 'description':
+          query[k] = { $regex: v, $options: 'i' }
+          break
+        case 'createdBy':
+          query[k] = v
+          break
+        case 'active':
+        case 'published':
+          if (v !== 'all') {
+            query[k] = v
+          }
+          break
+        case 'categories':
+          query[k] = { $all: v }
+          break
+        case 'ticketLink':
+          if (v !== 'all') {
+            query[k] = { $exists: v }
+          }
+          break
+        case 'start':
+        case 'end':
+          query[k] = { ...query[k], $gte: dayjs(v.lower).startOf('D').toDate() }
+          if (Object.keys(v).includes('upper')) {
+            query[k] = { ...query[k], $lte: dayjs(v.upper).endOf('D').toDate() }
+          } else {
+            query[k] = { ...query[k], $lte: dayjs(v.lower).endOf('D').toDate() }
+          }
+          break
+      }
+    })
+  }
   return query
 }
