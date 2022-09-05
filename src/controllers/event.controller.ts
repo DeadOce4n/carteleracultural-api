@@ -126,3 +126,18 @@ export const deleteEvent = async (req: Request, res: Response, next: NextFunctio
     next(e)
   }
 }
+
+export const countEvents = async (_: Request, res: Response, next: NextFunction) => {
+  try {
+    const qty = await Event.countDocuments({ active: true })
+    return res.status(200).send({
+      data: qty,
+      meta: {
+        success: true,
+        message: `Total events: ${qty}`
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
+}

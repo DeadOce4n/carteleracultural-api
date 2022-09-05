@@ -4,7 +4,8 @@ import {
   getEvent,
   addEvent,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  countEvents
 } from '../controllers/event.controller'
 import {
   addEventValidator,
@@ -16,6 +17,7 @@ import { filterMiddleware } from '../middlewares/filters.middleware'
 
 const eventRouter = Router()
 
+eventRouter.get('/count', countEvents)
 eventRouter.get('/', queryParamsValidator, filterMiddleware, getEvents)
 eventRouter.get('/:_id', getEvent)
 eventRouter.post(
