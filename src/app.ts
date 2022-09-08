@@ -9,6 +9,7 @@ import eventRouter from './routes/event.routes'
 import categoryRouter from './routes/category.routes'
 import userRouter from './routes/user.routes'
 import authRouter from './routes/auth.routes'
+import uploadRouter from './routes/upload.routes'
 
 dotenv.config()
 
@@ -27,6 +28,7 @@ mongoose.connect(MONGO_URI, { dbName: MONGO_DB }).then(() => {
   app.use('/categories', categoryRouter)
   app.use('/users', userRouter)
   app.use('/auth', authRouter)
+  app.use('/upload', uploadRouter)
 
   app.use(errorMiddleware)
 

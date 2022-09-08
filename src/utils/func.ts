@@ -51,3 +51,8 @@ export const buildFilters = (json: any) => {
   }
   return query
 }
+
+export const generateFilename = (name: string, extension: string) => {
+  const suffix = crypto.randomBytes(8).toString('hex')
+  return `${name}-${suffix}.${extension}`
+}

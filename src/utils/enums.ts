@@ -8,3 +8,10 @@ export enum HttpStatusCode {
   UNPROCESSABLE = 422,
   INTERNAL_SERVER = 500
 }
+
+export const IMG_MIME_TYPES = [
+  'image/jpg',
+  'image/jpeg',
+  'image/png',
+  'image/webp'
+]
