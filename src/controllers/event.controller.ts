@@ -5,7 +5,7 @@ import { HttpStatusCode } from '../utils/enums'
 
 export const getEvents = async (req: Request, res: Response) => {
   const { query: { skip, limit }, filters } = req as any
-  const events = await Event.find(filters, null, { skip, limit })
+  const events = await Event.find({ ...filters, active: true }, null, { skip, limit })
   return res.status(200).send({
     data: events,
     meta: {
