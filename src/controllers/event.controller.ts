@@ -4,14 +4,17 @@ import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
 
 export const getEvents = async (req: Request, res: Response) => {
-  const { query: { skip, limit }, filters } = req as any
-  const events = await Event.find({ ...filters, active: true }, null, { skip, limit })
+  const { query: { skip, limit }, filters: prevFilters } = req as any
+  const filters = { ...prevFilters, active: true }
+  const events = await Event.find(filters, null, { skip, limit }).exec()
+  const count = await Event.estimatedDocumentCount(filters).exec()
+
   return res.status(200).send({
     data: events,
     meta: {
       success: true,
       message: 'Fetched events successfully',
-      count: events.length
+      count
     }
   })
 }
