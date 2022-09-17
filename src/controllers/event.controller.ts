@@ -2,11 +2,21 @@ import { Request, Response, NextFunction } from 'express'
 import { Event } from '../models/event.model'
 import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
+import { parseSortOperator } from '../utils/func'
 
 export const getEvents = async (req: Request, res: Response) => {
-  const { query: { skip, limit }, filters: prevFilters } = req as any
+  const {
+    query: {
+      skip,
+      limit,
+      sort: rawSort
+    },
+    filters: prevFilters
+  } = req as any
   const filters = { ...prevFilters, active: true }
-  const events = await Event.find(filters, null, { skip, limit }).exec()
+  const sort = parseSortOperator(rawSort)
+  const options = { skip, limit, sort }
+  const events = await Event.find(filters, null, options).exec()
   const count = await Event.estimatedDocumentCount(filters).exec()
 
   return res.status(200).send({

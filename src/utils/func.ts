@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import { promisify } from 'util'
 import dayjs from 'dayjs'
+import { tail } from 'lodash'
 
 const asyncRandomBytes = promisify(crypto.randomBytes)
 
@@ -55,4 +56,20 @@ export const buildFilters = (json: any) => {
 export const generateFilename = (name: string, extension: string) => {
   const suffix = crypto.randomBytes(8).toString('hex')
   return `${name}-${suffix}.${extension}`
+}
+
+export const parseSortOperator = (operator: string) => {
+  let criteria
+  let field
+  if (operator.startsWith('-')) {
+    criteria = -1
+    field = tail(operator).join('')
+  } else {
+    criteria = 1
+    field = operator
+  }
+  const query = {
+    [field]: criteria
+  }
+  return query
 }

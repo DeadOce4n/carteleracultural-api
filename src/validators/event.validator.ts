@@ -186,6 +186,11 @@ export const queryParamsValidator = QueryValidator({
     type: 'number',
     convert: true,
     default: 20
+  },
+  sort: {
+    type: 'string',
+    pattern: /^-|[a-z]*/,
+    default: '-start'
   }
 }, (err, req: Request, res: Response, next: NextFunction) => {
   next(new APIError(
