@@ -11,9 +11,8 @@ export const getEvents = async (req: Request, res: Response) => {
       limit,
       sort: rawSort
     },
-    filters: prevFilters
+    filters
   } = req as any
-  const filters = { ...prevFilters, active: true }
   const sort = parseSortOperator(rawSort)
   const options = { skip, limit, sort }
   const events = await Event.find(filters, null, options).exec()

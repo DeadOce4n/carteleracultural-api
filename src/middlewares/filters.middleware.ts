@@ -2,10 +2,13 @@ import { Request, Response, NextFunction } from 'express'
 import { buildFilters } from '../utils/func'
 
 export const filterMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const { filters } = req.query as any
-  if (filters) {
-    req.filters = buildFilters(filters)
-    return next()
+  let { filters } = req.query as any ?? {}
+  if (!filters) {
+    filters = { active: true }
+  } else if (!Object.keys(filters).includes('active')) {
+    filters.active = true
   }
+  const newFilters = buildFilters(filters)
+  req.filters = newFilters
   return next()
 }

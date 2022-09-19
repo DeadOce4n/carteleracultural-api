@@ -16,17 +16,15 @@ export const buildFilters = (json: any) => {
     Object.entries(json).forEach(([k, v]: [string, any]) => {
       switch (k) {
         case 'title':
-          query[k] = { $regex: v, $options: 'i' }
-          break
+        case 'name':
         case 'description':
           query[k] = { $regex: v, $options: 'i' }
           break
         case 'createdBy':
           query[k] = v
           break
-        case 'active':
         case 'published':
-          if (v !== 'all') {
+          if (typeof v === 'boolean') {
             query[k] = v
           }
           break
@@ -45,6 +43,11 @@ export const buildFilters = (json: any) => {
             query[k] = { ...query[k], $lte: dayjs(v.upper).endOf('D').toDate() }
           } else {
             query[k] = { ...query[k], $lte: dayjs(v.lower).endOf('D').toDate() }
+          }
+          break
+        case 'showDeleted':
+          if (!v) {
+            query.active = true
           }
           break
       }

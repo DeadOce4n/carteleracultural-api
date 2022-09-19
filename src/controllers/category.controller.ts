@@ -2,22 +2,37 @@ import { Request, Response, NextFunction } from 'express'
 import { Category } from '../models/category.model'
 import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
+import { parseSortOperator } from '../utils/func'
 
-export const getCategories = async (_: Request, res: Response) => {
-  const categories = await Category.find()
+export const getCategories = async (req: Request, res: Response) => {
+  const {
+    query: {
+      skip,
+      limit,
+      sort: rawSort
+    },
+    filters
+  } = req as any
+  console.log(filters)
+  const sort = parseSortOperator(rawSort)
+  const options = { skip, limit, sort }
+  const categories = await Category.find(filters, null, options).exec()
+  const count = await Category.estimatedDocumentCount(filters).exec()
+
   return res.status(200).send({
     data: categories,
     meta: {
       success: true,
-      message: 'Fetched categories successfully'
+      message: 'Fetched categories successfully',
+      count
     }
   })
 }
 
 export const getCategory = async (req: Request, res: Response, next: NextFunction) => {
+  const { _id } = req.params
   try {
-    const { _id } = req.params
-    const category = await Category.findById(_id)
+    const category = await Category.findById(_id).exec()
     if (!category) {
       throw new APIError(
         'NOT FOUND',
@@ -41,7 +56,7 @@ export const getCategory = async (req: Request, res: Response, next: NextFunctio
 export const addCategory = async (req: Request, res: Response, next: NextFunction) => {
   const { name } = req.body
   try {
-    const category = await Category.findOne({ name })
+    const category = await Category.findOne({ name }).exec()
     if (category) {
       if (category.active) {
         throw new APIError(
@@ -124,6 +139,21 @@ export const deleteCategory = async (req: Request, res: Response, next: NextFunc
       meta: {
         success: true,
         message: 'Category deleted successfully'
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
+}
+
+export const countCategories = async (_: Request, res: Response, next: NextFunction) => {
+  try {
+    const qty = await Category.countDocuments({ active: true })
+    return res.status(200).send({
+      data: qty,
+      meta: {
+        success: true,
+        message: `Total categories: ${qty}`
       }
     })
   } catch (e) {
