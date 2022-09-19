@@ -152,7 +152,7 @@ export const queryParamsValidator = QueryValidator({
       active: {
         type: 'enum',
         values: [true, false, 'all'],
-        optional: true,
+        default: true,
         convert: true
       },
       ticketLink: {
@@ -190,7 +190,7 @@ export const queryParamsValidator = QueryValidator({
   sort: {
     type: 'string',
     pattern: /^-|[a-z]*/,
-    default: '-start'
+    default: 'start'
   }
 }, (err, req: Request, res: Response, next: NextFunction) => {
   next(new APIError(

@@ -4,14 +4,26 @@ import {
   getCategory,
   addCategory,
   updateCategory,
-  deleteCategory
+  deleteCategory,
+  countCategories
 } from '../controllers/category.controller'
-import { addCategoryValidator, updateCategoryValidator } from '../validators/category.validator'
+import {
+  addCategoryValidator,
+  updateCategoryValidator,
+  queryParamsValidator
+} from '../validators/category.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
+import { filterMiddleware } from '../middlewares/filters.middleware'
 
 const categoryRouter = Router()
 
-categoryRouter.get('/', getCategories)
+categoryRouter.get(
+  '/',
+  queryParamsValidator,
+  filterMiddleware,
+  getCategories
+)
+categoryRouter.get('/count', countCategories)
 categoryRouter.get('/:_id', getCategory)
 categoryRouter.post(
   '/',
