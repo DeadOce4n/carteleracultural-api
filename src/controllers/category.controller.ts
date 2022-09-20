@@ -13,7 +13,6 @@ export const getCategories = async (req: Request, res: Response) => {
     },
     filters
   } = req as any
-  console.log(filters)
   const sort = parseSortOperator(rawSort)
   const options = { skip, limit, sort }
   const categories = await Category.find(filters, null, options).exec()
