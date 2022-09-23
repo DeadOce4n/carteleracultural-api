@@ -149,10 +149,9 @@ export const queryParamsValidator = QueryValidator({
         optional: true,
         convert: true
       },
-      active: {
-        type: 'enum',
-        values: [true, false, 'all'],
-        default: true,
+      showDeleted: {
+        type: 'boolean',
+        default: false,
         convert: true
       },
       ticketLink: {
