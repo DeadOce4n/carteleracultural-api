@@ -1,6 +1,8 @@
-import { BodyValidator } from 'fastest-express-validator'
+import { BodyValidator, QueryValidator } from 'fastest-express-validator'
 import { Request, Response, NextFunction } from 'express'
 import { roles } from '../models/user.model'
+import { APIError } from '../utils/baseError'
+import { HttpStatusCode } from '../utils/enums'
 
 export const addUserValidator = BodyValidator({
   name: {
@@ -42,7 +44,12 @@ export const addUserValidator = BodyValidator({
     optional: true
   }
 }, (err, req: Request, res: Response, next: NextFunction) => {
-  next(err)
+  next(new APIError(
+    'BAD REQUEST',
+    HttpStatusCode.BAD_REQUEST,
+    true,
+    `ValidationError: ${JSON.stringify(err, null, 4)}`
+  ))
 })
 
 export const updateUserValidator = BodyValidator({
@@ -90,5 +97,52 @@ export const updateUserValidator = BodyValidator({
     optional: true
   }
 }, (err, req: Request, res: Response, next: NextFunction) => {
-  next(err)
+  next(new APIError(
+    'BAD REQUEST',
+    HttpStatusCode.BAD_REQUEST,
+    true,
+    `ValidationError: ${JSON.stringify(err, null, 4)}`
+  ))
+})
+
+export const queryParamsValidator = QueryValidator({
+  filters: {
+    type: 'object',
+    props: {
+      username: 'string|optional',
+      name: 'string|optional',
+      lastName: 'string|optional',
+      email: 'string|optional',
+      showDeleted: {
+        type: 'boolean',
+        default: false,
+        convert: true
+      },
+      role: {
+        type: 'array',
+        items: 'string',
+        enum: ['normal', 'admin', 'super'],
+        optional: true
+      },
+      verified: {
+        type: 'enum',
+        values: [true, false, 'all'],
+        optional: true,
+        convert: true
+      },
+      registeredAt: {
+        type: 'date',
+        convert: true,
+        optional: true
+      }
+    },
+    optional: true
+  }
+}, (err, req: Request, res: Response, next: NextFunction) => {
+  next(new APIError(
+    'BAD REQUEST',
+    HttpStatusCode.BAD_REQUEST,
+    true,
+    `ValidationError: ${JSON.stringify(err, null, 4)}`
+  ))
 })

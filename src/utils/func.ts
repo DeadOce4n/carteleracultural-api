@@ -18,11 +18,15 @@ export const buildFilters = (json: any) => {
         case 'title':
         case 'name':
         case 'description':
+        case 'username':
+        case 'lastName':
+        case 'email':
           query[k] = { $regex: v, $options: 'i' }
           break
         case 'createdBy':
           query[k] = v
           break
+        case 'verified':
         case 'published':
           if (typeof v === 'boolean') {
             query[k] = v
@@ -50,6 +54,8 @@ export const buildFilters = (json: any) => {
             query.active = true
           }
           break
+        case 'role':
+          query[k] = { $in: v }
       }
     })
   }

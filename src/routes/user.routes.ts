@@ -4,14 +4,21 @@ import {
   getUser,
   addUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  countUsers
 } from '../controllers/user.controller'
-import { addUserValidator, updateUserValidator } from '../validators/user.validator'
+import {
+  addUserValidator,
+  updateUserValidator,
+  queryParamsValidator
+} from '../validators/user.validator'
 import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
+import { filterMiddleware } from '../middlewares/filters.middleware'
 
 const userRouter = Router()
 
-userRouter.get('/', getUsers)
+userRouter.get('/', queryParamsValidator, filterMiddleware, getUsers)
+userRouter.get('/count', countUsers)
 userRouter.get('/:_id', getUser)
 userRouter.post(
   '/',
