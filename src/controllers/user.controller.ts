@@ -3,10 +3,30 @@ import { User } from '../models/user.model'
 import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
 import { omit } from 'lodash'
+import { parseSortOperator } from '../utils/func'
 
-export const getUsers = async (_: Request, res: Response) => {
-  const users = await User.find()
-  return res.status(200).send(users)
+export const getUsers = async (req: Request, res: Response) => {
+  const {
+    query: {
+      skip,
+      limit,
+      sort: rawSort
+    },
+    filters
+  } = req as any
+  const sort = parseSortOperator(rawSort)
+  const options = { skip, limit, sort }
+  const users = await User.find(filters, null, options).exec()
+  const count = await User.estimatedDocumentCount(filters).exec()
+
+  return res.status(200).send({
+    data: users,
+    meta: {
+      success: true,
+      message: 'Fetched users successfully',
+      count
+    }
+  })
 }
 
 export const getUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -127,6 +147,21 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
       meta: {
         success: true,
         message: 'User deleted successfully'
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
+}
+
+export const countUsers = async (_: Request, res: Response, next: NextFunction) => {
+  try {
+    const qty = await User.countDocuments({ active: true })
+    return res.status(200).send({
+      data: qty,
+      meta: {
+        success: true,
+        message: `Total users: ${qty}`
       }
     })
   } catch (e) {
