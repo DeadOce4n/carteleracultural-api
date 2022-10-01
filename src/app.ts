@@ -10,6 +10,7 @@ import categoryRouter from './routes/category.routes'
 import userRouter from './routes/user.routes'
 import authRouter from './routes/auth.routes'
 import uploadRouter from './routes/upload.routes'
+import path from 'path'
 
 dotenv.config()
 
@@ -19,10 +20,12 @@ const MONGO_DB = process.env.MONGO_DB || 'cartelera-cultural'
 mongoose.connect(MONGO_URI, { dbName: MONGO_DB }).then(() => {
   const app: Express = express()
   const port = process.env.PORT || 3000
+  const publicPath = path.join(__dirname, '../public')
 
   app.use(cors())
   app.use(express.json())
   app.use(loggerMiddleware)
+  app.use('/public', express.static(publicPath))
 
   app.use('/events', eventRouter)
   app.use('/categories', categoryRouter)
