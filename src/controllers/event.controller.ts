@@ -31,7 +31,11 @@ export const getEvents = async (req: Request, res: Response) => {
 export const getEvent = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params
   try {
-    const event = await Event.findById(_id).populate('categories')
+    const event = await Event
+      .findById(_id)
+      .populate('categories')
+      .populate('createdBy')
+      .exec()
     if (!event) {
       throw new APIError(
         'NOT FOUND',
@@ -74,7 +78,7 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
   const userRole = req.user?.role as string
 
   try {
-    const event = await Event.findById(_id)
+    const event = await Event.findById(_id).exec()
 
     if (!event) {
       throw new APIError(
@@ -94,11 +98,15 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
       )
     }
 
-    const updatedEvent = await Event.findOneAndUpdate(
-      { _id },
-      { $set: { ...req.body } },
-      { new: true }
-    )
+    const updatedEvent = await Event
+      .findOneAndUpdate(
+        { _id },
+        { $set: { ...req.body } },
+        { new: true }
+      )
+      .populate('categories')
+      .populate('createdBy')
+      .exec()
 
     return res.status(200).send({
       data: updatedEvent,
@@ -118,7 +126,7 @@ export const deleteEvent = async (req: Request, res: Response, next: NextFunctio
     const event = await Event.findOneAndUpdate(
       { _id },
       { $set: { active: false } }
-    )
+    ).exec()
     if (!event) {
       throw new APIError(
         'NOT_FOUND',
