@@ -49,12 +49,10 @@
     "fastest-validator": "^1.12.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.5.1",
-    "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.7.8",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
-    "pino-http": "^8.2.1",
-    "winston": "^3.8.1"
+    "pino-http": "^8.2.1"
   }
 }
