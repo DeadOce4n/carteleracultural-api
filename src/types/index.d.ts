@@ -11,3 +11,12 @@ declare global {
     }
   }
 }
+
+declare module 'http' {
+  interface IncomingMessage {
+    get: (header: string) => string | undefined
+  }
+  interface ServerResponse {
+    header: (header: string, value: number | string | object) => void
+  }
+}

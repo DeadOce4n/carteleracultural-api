@@ -1,47 +1,45 @@
-import winston from 'winston'
+import pino, { stdSerializers } from 'pino-http'
+import { randomUUID } from 'crypto'
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  debug: 4
-}
-
-const level = () => {
-  const env = process.env.NODE_ENV || 'development'
-  const isDevelopment = env === 'development'
-  return isDevelopment ? 'debug' : 'warn'
-}
-
-const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  debug: 'white'
-}
-
-winston.addColors(colors)
-
-const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-  winston.format.colorize({ all: true }),
-  winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
-)
-
-const transports = [
-  new winston.transports.Console(),
-  new winston.transports.File({
-    filename: 'logs/error.log',
-    level: 'error'
-  }),
-  new winston.transports.File({ filename: 'logs/all.log' })
-]
-
-export const logger = winston.createLogger({
-  level: level(),
-  levels,
-  format,
-  transports
+export const logger = pino({
+  genReqId: (req, res) => {
+    if (req.id) {
+      return req.id
+    }
+    let id = req.get('X-Request-Id')
+    if (id) {
+      return id
+    }
+    id = randomUUID()
+    res.header('X-Request-Id', id)
+    return id
+  },
+  serializers: {
+    err: stdSerializers.err,
+    req: stdSerializers.req,
+    res: stdSerializers.res
+  },
+  wrapSerializers: true,
+  customLogLevel: (req, res, err) => {
+    if (res.statusCode >= 400 && res.statusCode < 500) {
+      return 'warn'
+    } else if (res.statusCode >= 500 || err) {
+      return 'error'
+    } else if (res.statusCode >= 300 && res.statusCode < 400) {
+      return 'silent'
+    }
+    return 'info'
+  },
+  customSuccessMessage: (req, res) => {
+    if (res.statusCode === 404) {
+      return 'Resource not found :('
+    }
+    return `${req.method} completed!`
+  },
+  customReceivedMessage: (req, res) => {
+    return `Incoming ${req.method} request: `
+  },
+  customErrorMessage: (req, res, err) => {
+    return `Request failed with status ${res.statusCode}`
+  }
 })
