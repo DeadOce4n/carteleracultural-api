@@ -3,9 +3,9 @@ import { logger } from './logger'
 
 class ErrorHandler {
   public handleError (err: Error) {
-    logger.error('Error message from the centralized error handler:', err)
+    logger.logger.error('Error message from the centralized error handler:', err)
     if (err.stack) {
-      logger.error(err.stack)
+      logger.logger.error(err.stack)
     }
   }
 

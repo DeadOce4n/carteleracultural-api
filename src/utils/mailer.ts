@@ -12,7 +12,7 @@ const transporter = createTransport({
 })
 
 export const sendMail = async (email: string, code: string) => {
-  logger.info(`Sending verification email to ${email}`)
+  logger.logger.info(`Sending verification email to ${email}`)
 
   const info = await transporter.sendMail({
     from: 'verification@carteleraculturalens.com',
@@ -21,5 +21,5 @@ export const sendMail = async (email: string, code: string) => {
     html: `Verification code: ${code}`
   })
 
-  logger.info(`Message sent: ${info.messageId}`)
+  logger.logger.info(`Message sent: ${info.messageId}`)
 }
