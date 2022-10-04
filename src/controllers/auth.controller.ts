@@ -26,7 +26,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         { username },
         { email: username }
       ]
-    })
+    }).exec()
 
     if (!user) {
       throw new APIError(

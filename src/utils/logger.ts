@@ -1,7 +1,8 @@
-import pino, { stdSerializers } from 'pino-http'
+import pino, { stdSerializers, Options } from 'pino-http'
 import { randomUUID } from 'crypto'
 
-export const logger = pino({
+const options: Options = {
+  enabled: process.env.NODE_ENV !== 'test',
   genReqId: (req, res) => {
     if (req.id) {
       return req.id
@@ -42,4 +43,6 @@ export const logger = pino({
   customErrorMessage: (req, res, err) => {
     return `Request failed with status ${res.statusCode}`
   }
-})
+}
+
+export const logger = pino(options)
