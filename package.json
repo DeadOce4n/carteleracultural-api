@@ -9,8 +9,8 @@
   "private": false,
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "nodemon --files src/server.ts | pino-pretty",
+    "start": "NODE_ENV=production node -r dotenv/config dist/server.js",
+    "dev": "NODE_ENV=development nodemon --files -r dotenv/config src/server.ts | pino-pretty",
     "test": "jest"
   },
   "devDependencies": {

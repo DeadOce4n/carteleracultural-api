@@ -1,7 +1,6 @@
 import express, { Express } from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import { loggerMiddleware } from './middlewares/logger.middleware'
 import { errorMiddleware } from './middlewares/error.middleware'
 
@@ -12,8 +11,6 @@ import authRouter from './routes/auth.routes'
 import uploadRouter from './routes/upload.routes'
 import path from 'path'
 import { logger } from './utils/logger'
-
-dotenv.config()
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/ccultural-prod'
 const MONGO_DB = process.env.NODE_ENV === 'test'
