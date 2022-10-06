@@ -6,7 +6,7 @@ import { tail } from 'lodash'
 const asyncRandomBytes = promisify(crypto.randomBytes)
 
 export const generateRandomToken = async () => {
-  const token = await asyncRandomBytes(32)
+  const token = await asyncRandomBytes(16)
   return token.toString('hex')
 }
 

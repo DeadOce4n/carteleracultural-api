@@ -54,7 +54,13 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       issuer: 'api.carteleraculturalens.com'
     })
 
-    return res.send({ token })
+    return res.status(200).send({
+      data: token,
+      meta: {
+        success: true,
+        message: 'User logged in successfully'
+      }
+    })
   } catch (e) {
     next(e)
   }
@@ -147,8 +153,8 @@ export const verify = async (req: Request, res: Response, next: NextFunction) =>
 
 export const resendVerification = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user?._id
-    const user = await User.findById(userId)
+    const { _id } = req.body
+    const user = await User.findById(_id)
     if (!user) {
       throw new APIError(
         'NOT FOUND',
