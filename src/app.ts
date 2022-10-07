@@ -1,6 +1,7 @@
 import express, { Express } from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import { loggerMiddleware } from './middlewares/logger.middleware'
 import { errorMiddleware } from './middlewares/error.middleware'
 
@@ -26,8 +27,12 @@ if (process.env.NODE_ENV !== 'test') {
 const app: Express = express()
 const publicPath = path.join(__dirname, '../public')
 
-app.use(cors())
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:5173']
+}))
 app.use(express.json())
+app.use(cookieParser())
 app.use(loggerMiddleware)
 app.use('/public', express.static(publicPath))
 

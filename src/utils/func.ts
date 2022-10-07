@@ -2,6 +2,13 @@ import crypto from 'crypto'
 import { promisify } from 'util'
 import dayjs from 'dayjs'
 import { tail } from 'lodash'
+import jwt from 'jsonwebtoken'
+import type { Response } from 'express'
+import {
+  COOKIE_MAX_AGE,
+  JWT_ISSUER,
+  JWT_AUDIENCE
+} from './constants'
 
 const asyncRandomBytes = promisify(crypto.randomBytes)
 
@@ -82,3 +89,24 @@ export const parseSortOperator = (operator: string) => {
   }
   return query
 }
+
+export const bakeCookie = (token: string, res: Response) => res.cookie(
+  'jwt',
+  token,
+  {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    maxAge: COOKIE_MAX_AGE
+  }
+)
+
+export const generateJWT = (payload: any, expiration: string, secret: string) => jwt.sign(
+  payload,
+  secret,
+  {
+    expiresIn: expiration,
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE
+  }
+)
