@@ -5,10 +5,11 @@ import jwt from 'jsonwebtoken'
 import { User, Role } from '../models/user.model'
 import { APIError } from '../utils/baseError'
 import { HttpStatusCode } from '../utils/enums'
+import { ACCESS_TOKEN_SECRET } from '../utils/constants'
 
 const options: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET_KEY ?? 'sacarrácatelas',
+  secretOrKey: ACCESS_TOKEN_SECRET,
   issuer: 'api.carteleraculturalens.com',
   audience: 'carteleraculturalens.com',
   ignoreExpiration: true,

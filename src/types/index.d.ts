@@ -20,3 +20,9 @@ declare module 'http' {
     header: (header: string, value: number | string | object) => void
   }
 }
+
+declare module 'jsonwebtoken' {
+  interface JwtPayload {
+    userId?: string
+  }
+}
