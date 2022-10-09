@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+
+  mongo:
+    image: mongo:6.0.2
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    # uncomment the following to allow accessing the MongoDB instance publically
+    # ports:
+    #   - 27017:27017
+
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://root:toor@mongo:27017
+      MONGO_DB: ccultural-dev
+      MAIL_HOST: mail
+      MAIL_PORT: 25
+      MAIL_USER: user
+      MAIL_PASS: pass
+      MAIL_SECURE: false
+      MAIL_SENDER_ADDRESS: no-reply@example.com
+      ACCESS_TOKEN_SECRET: someStrongSecret
+      REFRESH_TOKEN_SECRET: someOtherStrongSecret
+      JWT_ISSUER: some-domain.com
+      JWT_AUDIENCE: some-other-domain.com
