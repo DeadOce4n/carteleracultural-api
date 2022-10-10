@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import { Verification } from '../models/verification.model'
 
 dotenv.config({ path: '../../.env'})
+jest.setTimeout(40000)
 
 const userData: any = {
   name: 'Pedro',
@@ -62,7 +63,7 @@ describe('test authentication', () => {
     const auth = `Bearer ${credentials}`
     const loginRes = await request(app).post('/auth/login').set('Authorization', auth)
     expect(loginRes.statusCode).toBe(200)
-    expect(loginRes.body.token).toBeDefined()
+    expect(loginRes.body.data).toBeDefined()
   })
 
 })
