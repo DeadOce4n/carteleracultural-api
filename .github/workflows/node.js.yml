@@ -34,6 +34,7 @@ jobs:
         echo TEST_MAIL_USER=${{ secrets.TEST_MAIL_USER }} >> .env
         echo TEST_MAIL_PASS=${{ secrets.TEST_MAIL_PASS }} >> .env
         echo TEST_MAIL_ADDRESS=${{ secrets.TEST_MAIL_ADDRESS }} >> .env
+    - run: corepack enable
     - run: yarn --frozen-lockfile
     - run: yarn build
     - run: yarn test
