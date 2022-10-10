@@ -34,6 +34,10 @@ jobs:
         echo TEST_MAIL_USER=${{ secrets.TEST_MAIL_USER }} >> .env
         echo TEST_MAIL_PASS=${{ secrets.TEST_MAIL_PASS }} >> .env
         echo TEST_MAIL_ADDRESS=${{ secrets.TEST_MAIL_ADDRESS }} >> .env
+        echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env
+        echo JWT_AUDIENCE=${{ secrets.JWT_AUDIENCE }} >> .env
+        echo ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }} >> .env
+        echo REFRESH_TOKEN_SECRET=${{ secrets.REFRESH_TOKEN_SECRET }} >> .env
     - run: corepack enable
     - run: yarn --frozen-lockfile
     - run: yarn build
