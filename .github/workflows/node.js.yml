@@ -26,6 +26,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
+    - name: Create and populate .env file
+      run: |
+        touch .env
+        echo TEST_MAIL_HOST=${{ secrets.TEST_MAIL_HOST }} >> .env
+        echo TEST_MAIL_PORT=${{ secrets.TEST_MAIL_PORT }} >> .env
+        echo TEST_MAIL_USER=${{ secrets.TEST_MAIL_USER }} >> .env
+        echo TEST_MAIL_PASS=${{ secrets.TEST_MAIL_PASS }} >> .env
+        echo TEST_MAIL_ADDRESS=${{ secrets.TEST_MAIL_ADDRESS }} >> .env
     - run: yarn --frozen-lockfile
     - run: yarn build
     - run: yarn test
