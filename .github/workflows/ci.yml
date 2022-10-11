@@ -42,3 +42,15 @@ jobs:
     - run: yarn --frozen-lockfile
     - run: yarn build
     - run: yarn test
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        tags: ThyDevourer/carteleracultural-api:latest
