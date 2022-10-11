@@ -53,4 +53,4 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: ThyDevourer/carteleracultural-api:latest
+        tags: ivanpartida/carteleracultural-api:latest
