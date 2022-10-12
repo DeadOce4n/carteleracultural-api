@@ -23,13 +23,14 @@ if (process.env.NODE_ENV !== 'test') {
     logger.logger.info(`Mongoose connected on ${MONGO_URI}/${MONGO_DB}`)
   })
 }
+const CORS_ORIGINS = process.env.CORS_ORIGINS?.split(',') ?? ['http://localhost:5173']
 
 const app: Express = express()
 const publicPath = path.join(__dirname, '../public')
 
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:5173']
+  origin: CORS_ORIGINS
 }))
 app.use(express.json())
 app.use(cookieParser())
