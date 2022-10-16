@@ -157,8 +157,18 @@ export const verify = async (req: Request, res: Response, next: NextFunction) =>
     }
     user.verified = true
     await user.save()
+    await Verification.deleteOne({ _id: verification._id }).exec()
+
+    const payload = omit(user.toObject(), 'password')
+    const accessToken = generateJWT(payload, '10s', ACCESS_TOKEN_SECRET)
+    const refreshToken = generateJWT({ userId: user._id }, '1d', REFRESH_TOKEN_SECRET)
+    const newSession = new Session({ user: user._id, refreshToken })
+    await newSession.save()
+
+    bakeCookie(refreshToken, res)
+
     return res.status(200).send({
-      data: omit(user.toObject(), 'password'),
+      data: accessToken,
       meta: {
         success: true,
         message: 'Verified account successfully'
