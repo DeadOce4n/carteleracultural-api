@@ -1,23 +1,34 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: CI
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_call:
+    secrets:
+      TEST_MAIL_HOST:
+        required: true
+      TEST_MAIL_PORT:
+        required: true
+      TEST_MAIL_USER:
+        required: true
+      TEST_MAIL_PASS:
+        required: true
+      TEST_MAIL_ADDRESS:
+        required: true
+      JWT_ISSUER:
+        required: true
+      JWT_AUDIENCE:
+        required: true
+      ACCESS_TOKEN_SECRET:
+        required: true
+      REFRESH_TOKEN_SECRET:
+        required: true
+
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v3
@@ -42,15 +53,3 @@ jobs:
     - run: yarn --frozen-lockfile
     - run: yarn build
     - run: yarn test
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Build and push
-      uses: docker/build-push-action@v3
-      with:
-        push: true
-        tags: ivanpartida/carteleracultural-api:latest
