@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test
-        uses: ./.github/workflows/ci.yml
+        uses: .github/workflows/ci.yml
         with:
           TEST_MAIL_HOST: ${{ secrets.TEST_MAIL_HOST }}
           TEST_MAIL_PORT: ${{ secrets.TEST_MAIL_PORT }}
