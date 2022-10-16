@@ -1,5 +1,4 @@
 name: CI
-
 on:
   pull_request:
     branches: [ "main" ]
@@ -23,13 +22,9 @@ on:
         required: true
       REFRESH_TOKEN_SECRET:
         required: true
-
-
 jobs:
-  test:
-
+  build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
