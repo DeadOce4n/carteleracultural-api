@@ -8,6 +8,8 @@ import {
   MAIL_SECURE,
   MAIL_SENDER_ADDRESS
 } from '../utils/constants'
+import {APIError} from './baseError'
+import {HttpStatusCode} from './enums'
 
 const transporter = createTransport({
   host: MAIL_HOST,
@@ -22,12 +24,22 @@ const transporter = createTransport({
 export const sendMail = async (email: string, code: string) => {
   logger.logger.info(`Sending verification email to ${email}`)
 
-  const info = await transporter.sendMail({
-    from: MAIL_SENDER_ADDRESS,
-    to: email,
-    subject: 'Please verify your account',
-    html: `Verification code: ${code}`
-  })
-
-  logger.logger.info(`Message sent: ${info.messageId}`)
+  try {
+    const info = await transporter.sendMail({
+      from: MAIL_SENDER_ADDRESS,
+      to: email,
+      subject: 'Please verify your account',
+      html: `Verification code: ${code}`
+    })
+    logger.logger.info(`Message sent: ${info.messageId}`)
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new APIError(
+        'SERVER_ERROR',
+        HttpStatusCode.INTERNAL_SERVER,
+        true,
+        e.message
+      )
+    }
+  }
 }
