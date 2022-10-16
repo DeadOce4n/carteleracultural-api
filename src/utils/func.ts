@@ -13,7 +13,7 @@ import {
 const asyncRandomBytes = promisify(crypto.randomBytes)
 
 export const generateRandomToken = async () => {
-  const token = await asyncRandomBytes(16)
+  const token = await asyncRandomBytes(4)
   return token.toString('hex')
 }
 
