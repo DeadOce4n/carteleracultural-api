@@ -8,8 +8,8 @@ import {
   MAIL_SECURE,
   MAIL_SENDER_ADDRESS
 } from '../utils/constants'
-import {APIError} from './baseError'
-import {HttpStatusCode} from './enums'
+import { APIError } from './baseError'
+import { HttpStatusCode } from './enums'
 
 const transporter = createTransport({
   host: MAIL_HOST,

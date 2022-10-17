@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt, {JwtPayload, TokenExpiredError} from 'jsonwebtoken'
+import jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken'
 import { omit } from 'lodash'
 import { User } from '../models/user.model'
 import { Verification } from '../models/verification.model'
@@ -304,9 +304,9 @@ export const logout = async (req: Request, res: Response) => {
   const refreshToken = cookies.jwt
 
   const session = await Session
-  .findOne({ token: refreshToken })
-  .populate('user')
-  .exec()
+    .findOne({ token: refreshToken })
+    .populate('user')
+    .exec()
 
   if (!session) {
     return res.status(200).send({
