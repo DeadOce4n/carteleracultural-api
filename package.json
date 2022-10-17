@@ -11,7 +11,9 @@
     "build": "tsc",
     "start": "NODE_ENV=production node -r dotenv/config dist/server.js",
     "dev": "NODE_ENV=development nodemon --files -r dotenv/config src/server.ts | pino-pretty",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky install",
+    "lint": "eslint --fix src/**/*.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
@@ -35,10 +37,12 @@
     "eslint": "^8.0.1",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^27.1.2",
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.1.0",
     "husky": "^8.0.1",
     "jest": "^29.1.2",
+    "lint-staged": "^13.0.3",
     "mongodb-memory-server": "^8.9.3",
     "nodemon": "^2.0.19",
     "pino-pretty": "^9.1.1",
@@ -63,5 +67,8 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "pino-http": "^8.2.1"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --fix"
   }
 }
