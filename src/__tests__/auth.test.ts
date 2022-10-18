@@ -6,7 +6,7 @@ import { Verification } from '../models/verification.model'
 import { Session } from '../models/session.model'
 import { User } from '../models/user.model'
 
-dotenv.config({ path: '../../.env'})
+dotenv.config({ path: '../../.env' })
 jest.setTimeout(40000)
 
 const userData: any = {
@@ -20,7 +20,7 @@ const userData: any = {
 describe('test authentication', () => {
   beforeAll(async () => await db.connect())
   afterEach(async () => await db.clearDatabase())
-  afterAll(async () =>  await db.closeDatabase())
+  afterAll(async () => await db.closeDatabase())
 
   it('should not be able to login if not registered', async () => {
     const credentials = Buffer.from('user:password').toString('base64')
@@ -88,5 +88,4 @@ describe('test authentication', () => {
     expect(loginRes.statusCode).toBe(200)
     expect(loginRes.body.data).toBeDefined()
   })
-
 })
