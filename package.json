@@ -27,7 +27,7 @@
     "@types/lodash": "^4.14.182",
     "@types/morgan": "^1.9.3",
     "@types/multer": "^1.4.7",
-    "@types/node": "^18.8.5",
+    "@types/node": "^18.11.0",
     "@types/nodemailer": "^6.4.5",
     "@types/passport": "^1.0.10",
     "@types/passport-jwt": "^3.0.6",
