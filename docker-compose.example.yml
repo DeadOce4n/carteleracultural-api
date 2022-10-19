@@ -13,9 +13,11 @@ services:
     #   - 27017:27017
 
   app:
-    build: .
+    image: ivanpartida/carteleracultural-api:latest
     ports:
       - 3000:3000
+    volumes:
+      - ccultural-api:/home/node/app/public
     environment:
       NODE_ENV: production
       MONGO_URI: "mongodb://${MONGO_USER}:${MONGO_PASS}@mongo:27017"
@@ -30,3 +32,5 @@ services:
       REFRESH_TOKEN_SECRET: "${REFRESH_TOKEN_SECRET:-someOtherStrongSecret}"
       JWT_ISSUER: "${JWT_ISSUER:-some-domain.com}"
       JWT_AUDIENCE: "${JWT_AUDIENCE:-some-other-domain.com}"
+volumes:
+  ccultural-api:
