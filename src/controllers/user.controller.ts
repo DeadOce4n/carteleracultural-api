@@ -100,11 +100,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
       )
     }
 
-    const user = await User.findOneAndUpdate(
-      { _id },
-      { $set: { ...req.body } },
-      { new: true }
-    )
+    const user = await User.findById(_id).exec()
 
     if (!user) {
       throw new APIError(
@@ -114,6 +110,12 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
         'User not found'
       )
     }
+
+    Object.entries(req.body).forEach(([key, value]) => {
+      user.set(key, value)
+    })
+
+    await user.save()
 
     return res.status(200).send({
       data: user,
