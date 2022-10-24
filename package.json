@@ -31,6 +31,7 @@
     "@types/nodemailer": "^6.4.5",
     "@types/passport": "^1.0.10",
     "@types/passport-jwt": "^3.0.6",
+    "@types/sharp": "^0.31.0",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
@@ -66,7 +67,8 @@
     "nodemailer": "^6.7.8",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
-    "pino-http": "^8.2.1"
+    "pino-http": "^8.2.1",
+    "sharp": "^0.31.1"
   },
   "lint-staged": {
     "*.ts": "eslint --fix"
