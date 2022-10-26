@@ -1,4 +1,6 @@
 # Cartelera Cultural de Ensenada - REST API
+[![CI](https://github.com/ThyDevourer/carteleracultural-api/actions/workflows/ci.yml/badge.svg)](https://github.com/ThyDevourer/carteleracultural-api/actions/workflows/ci.yml)
+[![CD](https://github.com/ThyDevourer/carteleracultural-api/actions/workflows/cd.yml/badge.svg)](https://github.com/ThyDevourer/carteleracultural-api/actions/workflows/cd.yml)
 
 RESTful API for [Cartelera Cultural de Ensenada](https://carteleraculturalens.com),
 built with the following technologies:

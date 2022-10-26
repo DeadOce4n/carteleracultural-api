@@ -6,14 +6,14 @@ import {
   updateUser,
   deleteUser,
   countUsers
-} from '../controllers/user.controller'
+} from './user.controller'
 import {
   addUserValidator,
   updateUserValidator,
   queryParamsValidator
-} from '../validators/user.validator'
-import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
-import { filterMiddleware } from '../middlewares/filters.middleware'
+} from './user.validator'
+import { authMiddleware, roleCheckMiddleware } from '../../middlewares/auth.middleware'
+import { filterMiddleware } from '../../middlewares/filters.middleware'
 
 const userRouter = Router()
 

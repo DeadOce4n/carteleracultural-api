@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import { Event } from '../models/event.model'
-import { APIError } from '../utils/baseError'
-import { HttpStatusCode } from '../utils/enums'
-import { parseSortOperator } from '../utils/func'
+import { Event } from './event.model'
+import { APIError } from '../../utils/baseError'
+import { HttpStatusCode } from '../../utils/enums'
+import { parseSortOperator } from '../../utils/func'
 
 export const getEvents = async (req: Request, res: Response) => {
   const {

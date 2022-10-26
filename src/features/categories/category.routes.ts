@@ -6,14 +6,14 @@ import {
   updateCategory,
   deleteCategory,
   countCategories
-} from '../controllers/category.controller'
+} from './category.controller'
 import {
   addCategoryValidator,
   updateCategoryValidator,
   queryParamsValidator
-} from '../validators/category.validator'
-import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
-import { filterMiddleware } from '../middlewares/filters.middleware'
+} from './category.validator'
+import { authMiddleware, roleCheckMiddleware } from '../../middlewares/auth.middleware'
+import { filterMiddleware } from '../../middlewares/filters.middleware'
 
 const categoryRouter = Router()
 
