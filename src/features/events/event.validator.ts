@@ -1,8 +1,8 @@
 import { BodyValidator, QueryValidator } from 'fastest-express-validator'
 import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
-import { APIError } from '../utils/baseError'
-import { HttpStatusCode } from '../utils/enums'
+import { APIError } from '../../utils/baseError'
+import { HttpStatusCode } from '../../utils/enums'
 
 const { ObjectId: ObjectID } = Types
 

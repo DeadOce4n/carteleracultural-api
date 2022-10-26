@@ -1,5 +1,5 @@
 import { Model, Schema, model } from 'mongoose'
-import { generatePasswordHash, checkPasswordHash } from '../utils/passwd'
+import { generatePasswordHash, checkPasswordHash } from '../../utils/passwd'
 
 export const roles = ['normal', 'admin', 'super'] as const
 export type Role = typeof roles[number]

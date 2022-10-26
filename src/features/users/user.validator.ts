@@ -1,8 +1,8 @@
 import { BodyValidator, QueryValidator } from 'fastest-express-validator'
 import { Request, Response, NextFunction } from 'express'
-import { roles } from '../models/user.model'
-import { APIError } from '../utils/baseError'
-import { HttpStatusCode } from '../utils/enums'
+import { roles } from './user.model'
+import { APIError } from '../../utils/baseError'
+import { HttpStatusCode } from '../../utils/enums'
 
 export const addUserValidator = BodyValidator({
   name: {

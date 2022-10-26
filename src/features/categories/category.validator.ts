@@ -1,7 +1,7 @@
 import { BodyValidator, QueryValidator } from 'fastest-express-validator'
 import { Request, Response, NextFunction } from 'express'
-import { APIError } from '../utils/baseError'
-import { HttpStatusCode } from '../utils/enums'
+import { APIError } from '../../utils/baseError'
+import { HttpStatusCode } from '../../utils/enums'
 
 export const addCategoryValidator = BodyValidator({
   name: {

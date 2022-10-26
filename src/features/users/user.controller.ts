@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
-import { User } from '../models/user.model'
-import { APIError } from '../utils/baseError'
-import { HttpStatusCode } from '../utils/enums'
+import { User } from './user.model'
+import { APIError } from '../../utils/baseError'
+import { HttpStatusCode } from '../../utils/enums'
 import { omit } from 'lodash'
-import { parseSortOperator } from '../utils/func'
+import { parseSortOperator } from '../../utils/func'
 
 export const getUsers = async (req: Request, res: Response) => {
   const {

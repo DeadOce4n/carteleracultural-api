@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import { Category } from '../models/category.model'
-import { APIError } from '../utils/baseError'
-import { HttpStatusCode } from '../utils/enums'
-import { parseSortOperator } from '../utils/func'
+import { Category } from './category.model'
+import { APIError } from '../../utils/baseError'
+import { HttpStatusCode } from '../../utils/enums'
+import { parseSortOperator } from '../../utils/func'
 
 export const getCategories = async (req: Request, res: Response) => {
   const {

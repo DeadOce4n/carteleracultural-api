@@ -1,12 +1,12 @@
-import app from '../app'
-import db from './db'
+import app from '../../../app'
+import db from '../../../__tests__/db'
 import request from 'supertest'
 import dotenv from 'dotenv'
-import { Verification } from '../models/verification.model'
-import { Session } from '../models/session.model'
-import { User } from '../models/user.model'
+import { Verification } from '../verification.model'
+import { Session } from '../session.model'
+import { User } from '../../users/user.model'
 
-dotenv.config({ path: '../../.env' })
+dotenv.config({ path: '../../../../.env' })
 jest.setTimeout(40000)
 
 const userData: any = {

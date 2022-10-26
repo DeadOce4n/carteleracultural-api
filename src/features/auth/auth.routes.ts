@@ -6,8 +6,8 @@ import {
   resendVerification,
   handleRefreshToken,
   logout
-} from '../controllers/auth.controller'
-import { signupValidator } from '../validators/auth.validator'
+} from './auth.controller'
+import { signupValidator } from './auth.validator'
 
 const authRouter = Router()
 

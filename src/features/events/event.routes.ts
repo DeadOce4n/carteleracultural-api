@@ -6,14 +6,14 @@ import {
   updateEvent,
   deleteEvent,
   countEvents
-} from '../controllers/event.controller'
+} from './event.controller'
 import {
   addEventValidator,
   updateEventValidator,
   queryParamsValidator
-} from '../validators/event.validator'
-import { authMiddleware, roleCheckMiddleware } from '../middlewares/auth.middleware'
-import { filterMiddleware } from '../middlewares/filters.middleware'
+} from './event.validator'
+import { authMiddleware, roleCheckMiddleware } from '../../middlewares/auth.middleware'
+import { filterMiddleware } from '../../middlewares/filters.middleware'
 
 const eventRouter = Router()
 

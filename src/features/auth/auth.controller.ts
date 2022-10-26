@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken'
 import { omit } from 'lodash'
-import { User } from '../models/user.model'
-import { Verification } from '../models/verification.model'
-import { Session } from '../models/session.model'
-import { APIError } from '../utils/baseError'
-import { HttpStatusCode } from '../utils/enums'
+import { User } from '../users/user.model'
+import { Verification } from './verification.model'
+import { Session } from './session.model'
+import { APIError } from '../../utils/baseError'
+import { HttpStatusCode } from '../../utils/enums'
 import {
   generateRandomToken,
   bakeCookie,
   generateJWT
-} from '../utils/func'
-import { sendMail } from '../utils/mailer'
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../utils/constants'
+} from '../../utils/func'
+import { sendMail } from '../../utils/mailer'
+import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../../utils/constants'
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
