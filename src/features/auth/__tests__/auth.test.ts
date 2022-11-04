@@ -1,5 +1,6 @@
 import app from '../../../app'
 import db from '../../../__tests__/db'
+import { io } from '../../../server'
 import request from 'supertest'
 import dotenv from 'dotenv'
 import { Verification } from '../verification.model'
@@ -20,7 +21,10 @@ const userData: any = {
 describe('test authentication', () => {
   beforeAll(async () => await db.connect())
   afterEach(async () => await db.clearDatabase())
-  afterAll(async () => await db.closeDatabase())
+  afterAll(async () => {
+    await db.closeDatabase()
+    io.close()
+  })
 
   it('should not be able to login if not registered', async () => {
     const credentials = Buffer.from('user:password').toString('base64')

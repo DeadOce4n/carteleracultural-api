@@ -3,6 +3,7 @@ import { Event } from './event.model'
 import { APIError } from '../../utils/baseError'
 import { HttpStatusCode } from '../../utils/enums'
 import { parseSortOperator } from '../../utils/func'
+import { io } from '../../server'
 
 export const getEvents = async (req: Request, res: Response) => {
   const {
@@ -60,6 +61,7 @@ export const addEvent = async (req: Request, res: Response, next: NextFunction) 
   const newEvent = new Event({ ...req.body, createdBy: req.user?._id })
   try {
     await newEvent.save()
+    io.emit('eventAdded', newEvent._id, req.user!._id)
     return res.status(200).send({
       data: newEvent,
       meta: {
@@ -107,6 +109,10 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
       .populate('categories')
       .populate('createdBy')
       .exec()
+
+    if (!event.published && updatedEvent?.published) {
+      io.emit('eventPublished', event._id, req.user!._id)
+    }
 
     return res.status(200).send({
       data: updatedEvent,

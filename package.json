@@ -68,7 +68,8 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "pino-http": "^8.2.1",
-    "sharp": "^0.31.1"
+    "sharp": "^0.31.1",
+    "socket.io": "^4.5.3"
   },
   "lint-staged": {
     "*.ts": "eslint --fix"
