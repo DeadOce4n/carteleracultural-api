@@ -42,7 +42,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
       )
     }
     return res.status(200).send({
-      data: user,
+      data: omit(user, 'password'),
       meta: {
         success: true,
         message: 'Fetched user successfully'
