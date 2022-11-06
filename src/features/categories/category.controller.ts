@@ -1,10 +1,14 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, NextFunction } from 'express'
 import { Category } from './category.model'
 import { APIError } from '../../utils/baseError'
 import { HttpStatusCode } from '../../utils/enums'
 import { parseSortOperator } from '../../utils/func'
+import { type GenericResponse, type ICategory } from '../../types/types'
 
-export const getCategories = async (req: Request, res: Response) => {
+export const getCategories = async (
+  req: Request,
+  res: GenericResponse<ICategory[]>
+) => {
   const {
     query: {
       skip,
@@ -28,7 +32,11 @@ export const getCategories = async (req: Request, res: Response) => {
   })
 }
 
-export const getCategory = async (req: Request, res: Response, next: NextFunction) => {
+export const getCategory = async (
+  req: Request,
+  res: GenericResponse<ICategory>,
+  next: NextFunction
+) => {
   const { _id } = req.params
   try {
     const category = await Category.findById(_id).exec()
@@ -52,7 +60,11 @@ export const getCategory = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
-export const addCategory = async (req: Request, res: Response, next: NextFunction) => {
+export const addCategory = async (
+  req: Request,
+  res: GenericResponse<ICategory>,
+  next: NextFunction
+) => {
   const { name } = req.body
   try {
     const category = await Category.findOne({ name }).exec()
@@ -90,7 +102,11 @@ export const addCategory = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
-export const updateCategory = async (req: Request, res: Response, next: NextFunction) => {
+export const updateCategory = async (
+  req: Request,
+  res: GenericResponse<ICategory>,
+  next: NextFunction
+) => {
   const { _id } = req.params
   try {
     const category = await Category.findOneAndUpdate(
@@ -118,7 +134,11 @@ export const updateCategory = async (req: Request, res: Response, next: NextFunc
   }
 }
 
-export const deleteCategory = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteCategory = async (
+  req: Request,
+  res: GenericResponse<null>,
+  next: NextFunction
+) => {
   const { _id } = req.params
   try {
     const category = await Category.findOneAndUpdate(
@@ -145,7 +165,11 @@ export const deleteCategory = async (req: Request, res: Response, next: NextFunc
   }
 }
 
-export const countCategories = async (_: Request, res: Response, next: NextFunction) => {
+export const countCategories = async (
+  _: Request,
+  res: GenericResponse<number>,
+  next: NextFunction
+) => {
   try {
     const qty = await Category.countDocuments({ active: true })
     return res.status(200).send({

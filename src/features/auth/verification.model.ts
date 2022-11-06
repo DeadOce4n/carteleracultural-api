@@ -1,10 +1,5 @@
 import { Schema, model } from 'mongoose'
-
-interface IVerification {
-  email: string,
-  code: string,
-  createdAt: Date,
-}
+import { IVerification } from '../../types/types'
 
 const verificationSchema = new Schema<IVerification>({
   email: String,

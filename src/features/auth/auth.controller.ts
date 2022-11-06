@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, NextFunction } from 'express'
 import jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken'
-import { omit } from 'lodash'
+import { omit } from 'remeda'
 import { User } from '../users/user.model'
 import { Verification } from './verification.model'
 import { Session } from './session.model'
@@ -13,8 +13,13 @@ import {
 } from '../../utils/func'
 import { sendMail } from '../../utils/mailer'
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../../utils/constants'
+import { IUser, type GenericResponse } from '../../types/types'
 
-export const login = async (req: Request, res: Response, next: NextFunction) => {
+export const login = async (
+  req: Request,
+  res: GenericResponse<string>,
+  next: NextFunction
+) => {
   try {
     if (!req.headers.authorization) {
       throw new APIError(
@@ -63,7 +68,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       )
     }
 
-    const payload = omit(user.toObject(), 'password')
+    const payload = omit(user.toObject(), ['password'])
     const accessToken = generateJWT(payload, '10s', ACCESS_TOKEN_SECRET)
     const refreshToken = generateJWT({ userId: user._id }, '1d', REFRESH_TOKEN_SECRET)
     const newSession = new Session({ user: user._id, refreshToken })
@@ -84,7 +89,11 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
-export const signup = async (req: Request, res: Response, next: NextFunction) => {
+export const signup = async (
+  req: Request,
+  res: GenericResponse<Omit<IUser, 'password'>>,
+  next: NextFunction
+) => {
   try {
     const existingUser = await User.findOne({
       $or: [
@@ -123,7 +132,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     await verification.save()
     await newUser.save()
     return res.status(200).send({
-      data: omit(newUser.toObject(), 'password'),
+      data: omit(newUser.toObject(), ['password']),
       meta: {
         success: true,
         message: 'User registered successfully, verification code sent to email'
@@ -134,7 +143,11 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-export const verify = async (req: Request, res: Response, next: NextFunction) => {
+export const verify = async (
+  req: Request,
+  res: GenericResponse<string>,
+  next: NextFunction
+) => {
   try {
     const { code, userId } = req.body
     const user = await User.findById(userId).exec()
@@ -159,7 +172,7 @@ export const verify = async (req: Request, res: Response, next: NextFunction) =>
     await user.save()
     await Verification.deleteOne({ _id: verification._id }).exec()
 
-    const payload = omit(user.toObject(), 'password')
+    const payload = omit(user.toObject(), ['password'])
     const accessToken = generateJWT(payload, '10s', ACCESS_TOKEN_SECRET)
     const refreshToken = generateJWT({ userId: user._id }, '1d', REFRESH_TOKEN_SECRET)
     const newSession = new Session({ user: user._id, refreshToken })
@@ -179,7 +192,11 @@ export const verify = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-export const resendVerification = async (req: Request, res: Response, next: NextFunction) => {
+export const resendVerification = async (
+  req: Request,
+  res: GenericResponse<null>,
+  next: NextFunction
+) => {
   try {
     const { _id } = req.body
     const user = await User.findById(_id).exec()
@@ -218,7 +235,11 @@ export const resendVerification = async (req: Request, res: Response, next: Next
   }
 }
 
-export const handleRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
+export const handleRefreshToken = async (
+  req: Request,
+  res: GenericResponse<string>,
+  next: NextFunction
+) => {
   try {
     const cookies = req.cookies
 
@@ -261,7 +282,7 @@ export const handleRefreshToken = async (req: Request, res: Response, next: Next
         )
       }
       const newRefreshToken = generateJWT({ userId: user._id }, '1d', REFRESH_TOKEN_SECRET)
-      const payload = omit(user.toObject(), 'password')
+      const payload = omit(user.toObject(), ['password'])
       const newAccessToken = generateJWT(payload, '10s', ACCESS_TOKEN_SECRET)
       session.refreshToken = newRefreshToken
       await session.save()
@@ -290,7 +311,10 @@ export const handleRefreshToken = async (req: Request, res: Response, next: Next
   }
 }
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (
+  req: Request,
+  res: GenericResponse<null>
+) => {
   const cookies = req.cookies
   if (!cookies.jwt) {
     return res.status(200).send({

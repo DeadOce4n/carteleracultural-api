@@ -1,11 +1,15 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, NextFunction } from 'express'
 import { User } from './user.model'
 import { APIError } from '../../utils/baseError'
 import { HttpStatusCode } from '../../utils/enums'
-import { omit } from 'lodash'
+import { omit } from 'remeda'
 import { parseSortOperator } from '../../utils/func'
+import { type GenericResponse, type IUser } from '../../types/types'
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getUsers = async (
+  req: Request,
+  res: GenericResponse<IUser[]>
+) => {
   const {
     query: {
       skip,
@@ -29,10 +33,14 @@ export const getUsers = async (req: Request, res: Response) => {
   })
 }
 
-export const getUser = async (req: Request, res: Response, next: NextFunction) => {
+export const getUser = async (
+  req: Request,
+  res: GenericResponse<Omit<IUser, 'password'>>,
+  next: NextFunction
+) => {
   try {
     const { _id } = req.params
-    const user = await User.findById(_id).lean()
+    const user = await User.findById(_id).exec()
     if (!user) {
       throw new APIError(
         'NOT FOUND',
@@ -42,7 +50,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
       )
     }
     return res.status(200).send({
-      data: omit(user, 'password'),
+      data: omit(user.toObject(), ['password']),
       meta: {
         success: true,
         message: 'Fetched user successfully'
@@ -53,7 +61,11 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
-export const addUser = async (req: Request, res: Response, next: NextFunction) => {
+export const addUser = async (
+  req: Request,
+  res: GenericResponse<Omit<IUser, 'password'>>,
+  next: NextFunction
+) => {
   try {
     const existingUser = await User.findOne({
       $or: [
@@ -74,7 +86,7 @@ export const addUser = async (req: Request, res: Response, next: NextFunction) =
     const newUser = new User({ ...req.body })
     await newUser.save()
     return res.status(200).send({
-      data: omit(newUser.toObject(), 'password'),
+      data: omit(newUser.toObject(), ['password']),
       meta: {
         success: true,
         message: 'Created user successfully'
@@ -85,7 +97,11 @@ export const addUser = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
-export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUser = async (
+  req: Request,
+  res: GenericResponse<Omit<IUser, 'password'>>,
+  next: NextFunction
+) => {
   const { _id } = req.params
   const userId = req.user?._id
   const userRole = req.user?.role as string
@@ -118,7 +134,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
     await user.save()
 
     return res.status(200).send({
-      data: user,
+      data: omit(user, ['password']),
       meta: {
         success: true,
         message: 'Updated user successfully'
@@ -129,7 +145,11 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
   }
 }
 
-export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteUser = async (
+  req: Request,
+  res: GenericResponse<null>,
+  next: NextFunction
+) => {
   const { _id } = req.params
   try {
     const user = await User.findOneAndUpdate(
@@ -156,7 +176,11 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
   }
 }
 
-export const countUsers = async (_: Request, res: Response, next: NextFunction) => {
+export const countUsers = async (
+  _: Request,
+  res: GenericResponse<number>,
+  next: NextFunction
+) => {
   try {
     const qty = await User.countDocuments({ active: true })
     return res.status(200).send({
