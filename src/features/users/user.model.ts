@@ -1,21 +1,7 @@
 import { Model, Schema, model } from 'mongoose'
+import { type IUser } from '../../types/types'
+import { roles } from '../../utils/constants'
 import { generatePasswordHash, checkPasswordHash } from '../../utils/passwd'
-
-export const roles = ['normal', 'admin', 'super'] as const
-export type Role = typeof roles[number]
-
-interface IUser {
-  name: string,
-  lastName: string,
-  username: string,
-  email: string,
-  password: string,
-  role: Role,
-  active: boolean,
-  verified: boolean,
-  registeredAt: Date,
-  lastLogin: Date
-}
 
 interface IUserMethods {
   checkPasswordHash(password: string): Promise<boolean>

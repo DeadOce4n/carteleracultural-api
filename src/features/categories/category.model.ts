@@ -1,10 +1,5 @@
 import { Schema, model } from 'mongoose'
-
-interface ICategory {
-  name: string,
-  createdAt: Date,
-  active: boolean
-}
+import { ICategory } from '../../types/types'
 
 const categorySchema = new Schema<ICategory>({
   name: String,

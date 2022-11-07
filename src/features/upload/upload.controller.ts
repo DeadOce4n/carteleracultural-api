@@ -1,8 +1,13 @@
 import fs from 'fs/promises'
-import { Request, Response, NextFunction } from 'express'
+import { Request, NextFunction } from 'express'
 import Sharp from 'sharp'
+import { type GenericResponse } from '../../types/types'
 
-export const imageUpload = async (req: Request, res: Response, next: NextFunction) => {
+export const imageUpload = async (
+  req: Request,
+  res: GenericResponse<string>,
+  next: NextFunction
+) => {
   try {
     const filePath = req.file!.path
     const image = Sharp(filePath)

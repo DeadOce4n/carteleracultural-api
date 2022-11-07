@@ -1,11 +1,15 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, NextFunction } from 'express'
 import { Event } from './event.model'
 import { APIError } from '../../utils/baseError'
 import { HttpStatusCode } from '../../utils/enums'
 import { parseSortOperator } from '../../utils/func'
 import { io } from '../../server'
+import { type GenericResponse, type IEvent } from '../../types/types'
 
-export const getEvents = async (req: Request, res: Response) => {
+export const getEvents = async (
+  req: Request,
+  res: GenericResponse<IEvent[]>
+) => {
   const {
     query: {
       skip,
@@ -29,7 +33,10 @@ export const getEvents = async (req: Request, res: Response) => {
   })
 }
 
-export const getEvent = async (req: Request, res: Response, next: NextFunction) => {
+export const getEvent = async (
+  req: Request,
+  res: GenericResponse<IEvent>,
+  next: NextFunction) => {
   const { _id } = req.params
   try {
     const event = await Event
@@ -57,7 +64,11 @@ export const getEvent = async (req: Request, res: Response, next: NextFunction) 
   }
 }
 
-export const addEvent = async (req: Request, res: Response, next: NextFunction) => {
+export const addEvent = async (
+  req: Request,
+  res: GenericResponse<IEvent>,
+  next: NextFunction
+) => {
   const newEvent = new Event({ ...req.body, createdBy: req.user?._id })
   try {
     await newEvent.save()
@@ -74,7 +85,11 @@ export const addEvent = async (req: Request, res: Response, next: NextFunction) 
   }
 }
 
-export const updateEvent = async (req: Request, res: Response, next: NextFunction) => {
+export const updateEvent = async (
+  req: Request,
+  res: GenericResponse<IEvent>,
+  next: NextFunction
+) => {
   const { _id } = req.params
   const userId = req.user?._id
   const userRole = req.user?.role as string
@@ -115,7 +130,7 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
     }
 
     return res.status(200).send({
-      data: updatedEvent,
+      data: updatedEvent!,
       meta: {
         success: true,
         message: 'Updated event successfully'
@@ -126,7 +141,11 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
-export const deleteEvent = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteEvent = async (
+  req: Request,
+  res: GenericResponse<null>,
+  next: NextFunction
+) => {
   const { _id } = req.params
   try {
     const event = await Event.findOneAndUpdate(
@@ -153,7 +172,11 @@ export const deleteEvent = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
-export const countEvents = async (_: Request, res: Response, next: NextFunction) => {
+export const countEvents = async (
+  _: Request,
+  res: GenericResponse<number>,
+  next: NextFunction
+) => {
   try {
     const qty = await Event.countDocuments({ active: true })
     return res.status(200).send({

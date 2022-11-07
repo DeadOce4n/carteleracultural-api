@@ -1,7 +1,6 @@
 import crypto from 'crypto'
 import { promisify } from 'util'
 import dayjs from 'dayjs'
-import { tail } from 'lodash'
 import jwt from 'jsonwebtoken'
 import type { Response } from 'express'
 import {
@@ -79,7 +78,7 @@ export const parseSortOperator = (operator: string) => {
   let field
   if (operator.startsWith('-')) {
     criteria = -1
-    field = tail(operator).join('')
+    field = operator.substring(1)
   } else {
     criteria = 1
     field = operator

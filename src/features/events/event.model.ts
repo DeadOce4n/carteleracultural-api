@@ -1,18 +1,5 @@
-import { Schema, model, Types } from 'mongoose'
-
-interface IEvent {
-  title: string,
-  description: string,
-  flyer: string,
-  start: Date,
-  end?: Date,
-  ticketLink?: string,
-  locationName?: string,
-  active: boolean,
-  published: boolean,
-  categories: Array<Types.ObjectId>,
-  createdBy: Types.ObjectId
-}
+import { Schema, model } from 'mongoose'
+import { type IEvent } from '../../types/types'
 
 const eventSchema = new Schema<IEvent>({
   title: String,

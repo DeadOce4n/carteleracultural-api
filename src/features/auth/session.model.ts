@@ -1,9 +1,5 @@
-import { Schema, model, Types } from 'mongoose'
-
-interface ISession {
-  user: Types.ObjectId,
-  refreshToken: string
-}
+import { Schema, model } from 'mongoose'
+import { ISession } from '../../types/types'
 
 const sessionSchema = new Schema<ISession>({
   user: {

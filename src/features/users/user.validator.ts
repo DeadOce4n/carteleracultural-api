@@ -1,6 +1,6 @@
 import { BodyValidator, QueryValidator } from 'fastest-express-validator'
 import { Request, Response, NextFunction } from 'express'
-import { roles } from './user.model'
+import { roles } from '../../utils/constants'
 import { APIError } from '../../utils/baseError'
 import { HttpStatusCode } from '../../utils/enums'
 
