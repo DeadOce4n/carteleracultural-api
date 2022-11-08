@@ -2,12 +2,10 @@ import app from '../../../app'
 import db from '../../../__tests__/db'
 import { io } from '../../../server'
 import request from 'supertest'
-import dotenv from 'dotenv'
 import { Verification } from '../verification.model'
 import { Session } from '../session.model'
 import { User } from '../../users/user.model'
 
-dotenv.config({ path: '../../../../.env' })
 jest.setTimeout(40000)
 
 const userData: any = {
@@ -35,7 +33,6 @@ describe('test authentication', () => {
 
   it('should create new unverified user and send verification email', async () => {
     const res = await request(app).post('/auth/signup').send(userData)
-    console.log(JSON.stringify(res, null, 4))
     expect(res.statusCode).toBe(200)
     expect(res.body.data).toBeDefined()
     Object.keys(res.body.data).forEach(key => {
