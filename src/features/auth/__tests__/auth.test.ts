@@ -35,6 +35,7 @@ describe('test authentication', () => {
 
   it('should create new unverified user and send verification email', async () => {
     const res = await request(app).post('/auth/signup').send(userData)
+    console.log(JSON.stringify(res, null, 4))
     expect(res.statusCode).toBe(200)
     expect(res.body.data).toBeDefined()
     Object.keys(res.body.data).forEach(key => {
