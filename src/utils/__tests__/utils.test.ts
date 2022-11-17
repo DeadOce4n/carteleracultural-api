@@ -47,7 +47,7 @@ describe('test utilitary functions', () => {
       createdBy: queryObject.createdBy,
       published: queryObject.published,
       categories: { $all: queryObject.categories },
-      start: {
+      'dates.0.start': {
         $gte: dayjs(queryObject.start.lower).startOf('D').toDate(),
         $lte: dayjs(queryObject.start.upper).endOf('D').toDate()
       },

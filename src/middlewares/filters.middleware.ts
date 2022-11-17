@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { buildFilters } from '../utils/func'
+import { logger } from '../utils/logger'
 
 export const filterMiddleware = (req: Request, res: Response, next: NextFunction) => {
   let { filters } = req.query as any ?? {}
@@ -9,6 +10,7 @@ export const filterMiddleware = (req: Request, res: Response, next: NextFunction
     filters.showDeleted = false
   }
   const newFilters = buildFilters(filters)
+  logger.logger.info(newFilters)
   req.filters = newFilters
   return next()
 }

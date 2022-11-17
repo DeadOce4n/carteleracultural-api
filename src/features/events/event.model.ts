@@ -5,8 +5,10 @@ const eventSchema = new Schema<IEvent>({
   title: String,
   description: String,
   flyer: String,
-  start: { type: Date, default: Date.now },
-  end: { type: Date, required: false },
+  dates: [{
+    start: { type: Date, required: true },
+    end: { type: Date, required: false }
+  }],
   ticketLink: { type: String, required: false },
   locationName: { type: String, required: false },
   active: Boolean,
