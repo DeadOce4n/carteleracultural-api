@@ -21,8 +21,10 @@ export interface IEvent {
   title: string,
   description: string,
   flyer: string,
-  start: Date,
-  end?: Date,
+  dates: {
+    start: Date,
+    end?: Date
+  }[],
   ticketLink?: string,
   locationName?: string,
   active: boolean,

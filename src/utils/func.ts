@@ -47,12 +47,11 @@ export const buildFilters = (json: any) => {
           }
           break
         case 'start':
-        case 'end':
-          query[k] = { ...query[k], $gte: dayjs(v.lower).startOf('D').toDate() }
+          query['dates.0.start'] = { ...query['dates.0.start'], $gte: dayjs(v.lower).startOf('D').toDate() }
           if (Object.keys(v).includes('upper')) {
-            query[k] = { ...query[k], $lte: dayjs(v.upper).endOf('D').toDate() }
+            query['dates.0.start'] = { ...query['dates.0.start'], $lte: dayjs(v.upper).endOf('D').toDate() }
           } else {
-            query[k] = { ...query[k], $lte: dayjs(v.lower).endOf('D').toDate() }
+            query['dates.0.start'] = { ...query['dates.0.start'], $lte: dayjs(v.lower).endOf('D').toDate() }
           }
           break
         case 'showDeleted':
@@ -82,6 +81,11 @@ export const parseSortOperator = (operator: string) => {
   } else {
     criteria = 1
     field = operator
+  }
+  switch (field) {
+    case 'start':
+      field = 'dates.0.start'
+      break
   }
   const query = {
     [field]: criteria

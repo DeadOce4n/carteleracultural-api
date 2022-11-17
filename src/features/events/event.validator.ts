@@ -16,14 +16,23 @@ export const addEventValidator = BodyValidator({
   flyer: {
     type: 'string'
   },
-  start: {
-    type: 'date',
-    convert: true
-  },
-  end: {
-    type: 'date',
-    optional: true,
-    convert: true
+  dates: {
+    type: 'array',
+    min: 1,
+    items: {
+      type: 'object',
+      props: {
+        start: {
+          type: 'date',
+          convert: true
+        },
+        end: {
+          type: 'date',
+          convert: true,
+          optional: true
+        }
+      }
+    }
   },
   ticketLink: {
     type: 'string',
@@ -68,15 +77,23 @@ export const updateEventValidator = BodyValidator({
     type: 'string',
     optional: true
   },
-  start: {
-    type: 'date',
-    optional: true,
-    convert: true
-  },
-  end: {
-    type: 'date',
-    optional: true,
-    convert: true
+  dates: {
+    type: 'array',
+    min: 1,
+    items: {
+      type: 'object',
+      props: {
+        start: {
+          type: 'date',
+          convert: true
+        },
+        end: {
+          type: 'date',
+          convert: true,
+          optional: true
+        }
+      }
+    }
   },
   ticketLink: {
     type: 'string',
@@ -114,21 +131,6 @@ export const queryParamsValidator = QueryValidator({
     props: {
       title: { type: 'string', optional: true },
       start: {
-        type: 'object',
-        props: {
-          lower: {
-            type: 'date',
-            convert: true
-          },
-          upper: {
-            type: 'date',
-            convert: true,
-            optional: true
-          }
-        },
-        optional: true
-      },
-      end: {
         type: 'object',
         props: {
           lower: {
