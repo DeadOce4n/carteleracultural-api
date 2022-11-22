@@ -80,6 +80,7 @@ export const updateEventValidator = BodyValidator({
   dates: {
     type: 'array',
     min: 1,
+    optional: true,
     items: {
       type: 'object',
       props: {
