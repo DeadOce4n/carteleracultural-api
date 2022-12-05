@@ -67,7 +67,7 @@
     "pino-http": "^8.2.1",
     "remeda": "^1.2.0",
     "sharp": "^0.31.2",
-    "socket.io": "^4.5.3"
+    "socket.io": "^4.5.4"
   },
   "lint-staged": {
     "*.ts": "eslint --fix"
